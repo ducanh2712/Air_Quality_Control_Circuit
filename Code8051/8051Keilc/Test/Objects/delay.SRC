@@ -1,0 +1,346 @@
+; .\Objects\delay.SRC generated from: delay.c
+; COMPILER INVOKED BY:
+;        C:\Keil_v5\C51\BIN\C51.EXE delay.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\delay.lst) TABS(2) SRC(.\Objects\delay.SRC)
+
+$NOMOD51
+
+NAME	DELAY
+
+P0	DATA	080H
+P1	DATA	090H
+P2	DATA	0A0H
+P3	DATA	0B0H
+T0	BIT	0B0H.4
+AC	BIT	0D0H.6
+T1	BIT	0B0H.5
+EA	BIT	0A8H.7
+IE	DATA	0A8H
+RD	BIT	0B0H.7
+ES	BIT	0A8H.4
+IP	DATA	0B8H
+RI	BIT	098H.0
+INT0	BIT	0B0H.2
+CY	BIT	0D0H.7
+TI	BIT	098H.1
+INT1	BIT	0B0H.3
+PS	BIT	0B8H.4
+SP	DATA	081H
+OV	BIT	0D0H.2
+WR	BIT	0B0H.6
+SBUF	DATA	099H
+PCON	DATA	087H
+SCON	DATA	098H
+TMOD	DATA	089H
+TCON	DATA	088H
+IE0	BIT	088H.1
+IE1	BIT	088H.3
+B	DATA	0F0H
+ACC	DATA	0E0H
+ET0	BIT	0A8H.1
+ET1	BIT	0A8H.3
+TF0	BIT	088H.5
+TF1	BIT	088H.7
+RB8	BIT	098H.2
+TH0	DATA	08CH
+EX0	BIT	0A8H.0
+IT0	BIT	088H.0
+TH1	DATA	08DH
+TB8	BIT	098H.3
+EX1	BIT	0A8H.2
+IT1	BIT	088H.2
+P	BIT	0D0H.0
+SM0	BIT	098H.7
+TL0	DATA	08AH
+SM1	BIT	098H.6
+TL1	DATA	08BH
+SM2	BIT	098H.5
+PT0	BIT	0B8H.1
+PT1	BIT	0B8H.3
+RS0	BIT	0D0H.3
+TR0	BIT	088H.4
+RS1	BIT	0D0H.4
+TR1	BIT	088H.6
+PX0	BIT	0B8H.0
+PX1	BIT	0B8H.2
+DPH	DATA	083H
+DPL	DATA	082H
+REN	BIT	098H.4
+RXD	BIT	0B0H.0
+TXD	BIT	0B0H.1
+F0	BIT	0D0H.5
+PSW	DATA	0D0H
+?PR?_delay_ms?DELAY  SEGMENT CODE 
+?DT?_delay_ms?DELAY  SEGMENT DATA OVERLAYABLE 
+?PR?timer_delay01us?DELAY                SEGMENT CODE 
+?PR?timer_delay20ms?DELAY                SEGMENT CODE 
+?PR?timer_delay30us?DELAY                SEGMENT CODE 
+?PR?timer_delay280us?DELAY               SEGMENT CODE 
+?PR?timer_delay40us?DELAY                SEGMENT CODE 
+?PR?timer_delay9680us?DELAY              SEGMENT CODE 
+	PUBLIC	timer_delay9680us
+	PUBLIC	timer_delay40us
+	PUBLIC	timer_delay280us
+	PUBLIC	timer_delay30us
+	PUBLIC	timer_delay20ms
+	PUBLIC	timer_delay01us
+	PUBLIC	_delay_ms
+
+	RSEG  ?DT?_delay_ms?DELAY
+?_delay_ms?BYTE:
+      count?040:   DS   2
+	ORG  2
+          i?041:   DS   2
+; #include <reg51.h>
+; #include "delay.h"
+; 
+; 
+; 
+; void delay_ms(unsigned int count)  /* Function to provide delay Approx 1ms */
+
+	RSEG  ?PR?_delay_ms?DELAY
+_delay_ms:
+	USING	0
+			; SOURCE LINE # 6
+	MOV  	count?040,R6
+	MOV  	count?040+01H,R7
+; {
+			; SOURCE LINE # 7
+; 	int i;
+; 	for(i=0;i<count;i++)
+			; SOURCE LINE # 9
+	CLR  	A
+	MOV  	i?041,A
+	MOV  	i?041+01H,A
+?C0001:
+	CLR  	C
+	MOV  	A,i?041+01H
+	SUBB 	A,count?040+01H
+	MOV  	A,i?041
+	SUBB 	A,count?040
+	JNC  	?C0004
+; 	{
+			; SOURCE LINE # 10
+; 		timer_delay01us();
+			; SOURCE LINE # 11
+	LCALL	timer_delay01us
+; 	}
+			; SOURCE LINE # 12
+	INC  	i?041+01H
+	MOV  	A,i?041+01H
+	JNZ  	?C0001
+	INC  	i?041
+?C0011:
+	SJMP 	?C0001
+; }
+			; SOURCE LINE # 13
+?C0004:
+	RET  	
+; END OF _delay_ms
+
+; 
+; void timer_delay01us()  /* Timer0 delay function */
+
+	RSEG  ?PR?timer_delay01us?DELAY
+timer_delay01us:
+	USING	0
+			; SOURCE LINE # 15
+; {
+			; SOURCE LINE # 16
+; 
+;  //TMOD = 0x01;
+;  //TH0 = 0xB8;  /* Load higher 8-bit in TH0 */
+;  //TL0 = 0x0C;  /* Load lower 8-bit in TL0 */
+;  //TR0 = 1;  /* Start timer0 */
+;  //while(TF0 == 0); /* Wait until timer0 flag set */
+;  //TR0 = 0;  /* Stop timer0 */
+;  //TF0 = 0;  /* Clear timer0 flag */
+; 	
+; 	#pragma asm
+; 	MOV TMOD, #21H
+	  MOV TMOD, #21H
+; 	MOV TH0, #0FCH
+	  MOV TH0, #0FCH
+; 	MOV TL0, #018H
+	  MOV TL0, #018H
+; 	SETB TR0
+	  SETB TR0
+; 	JNB TF0, $
+	  JNB TF0, $
+; 	CLR TR0
+	  CLR TR0
+; 	CLR TF0
+	  CLR TF0
+; 	#pragma endasm
+; }
+			; SOURCE LINE # 35
+	RET  	
+; END OF timer_delay01us
+
+; 
+; void timer_delay20ms()  /* Timer0 delay function */
+
+	RSEG  ?PR?timer_delay20ms?DELAY
+timer_delay20ms:
+	USING	0
+			; SOURCE LINE # 37
+; {
+			; SOURCE LINE # 38
+; 
+;  //TMOD = 0x01;
+;  //TH0 = 0xB8;  /* Load higher 8-bit in TH0 */
+;  //TL0 = 0x0C;  /* Load lower 8-bit in TL0 */
+;  //TR0 = 1;  /* Start timer0 */
+;  //while(TF0 == 0); /* Wait until timer0 flag set */
+;  //TR0 = 0;  /* Stop timer0 */
+;  //TF0 = 0;  /* Clear timer0 flag */
+; 	
+; 	#pragma asm
+; 	MOV TMOD, #21H
+	  MOV TMOD, #21H
+; 	MOV TH0, #0B1H
+	  MOV TH0, #0B1H
+; 	MOV TL0, #0E0H
+	  MOV TL0, #0E0H
+; 	SETB TR0
+	  SETB TR0
+; 	JNB TF0, $
+	  JNB TF0, $
+; 	CLR TR0
+	  CLR TR0
+; 	CLR TF0
+	  CLR TF0
+; 	#pragma endasm
+; }
+			; SOURCE LINE # 57
+	RET  	
+; END OF timer_delay20ms
+
+; 
+; void timer_delay30us()  /* Timer0 delay function */
+
+	RSEG  ?PR?timer_delay30us?DELAY
+timer_delay30us:
+	USING	0
+			; SOURCE LINE # 59
+; {
+			; SOURCE LINE # 60
+;  //TMOD = 0x01;  /* Timer0 mode1 (16-bit timer mode) */
+;  //TH0 = 0xFF;  /* Load higher 8-bit in TH0 */
+;  //TL0 = 0xF1;  /* Load lower 8-bit in TL0 */
+;  //TR0 = 1;  /* Start timer0 */
+;  //while(TF0 == 0); /* Wait until timer0 flag set */
+; // TR0 = 0;  /* Stop timer0 */
+; // TF0 = 0;  /* Clear timer0 flag */
+; 	#pragma asm
+; 	MOV TMOD, #21H
+	  MOV TMOD, #21H
+; 	MOV TH0, #0FFH
+	  MOV TH0, #0FFH
+; 	MOV TL0, #0E2H
+	  MOV TL0, #0E2H
+; 	SETB TR0
+	  SETB TR0
+; 	JNB TF0, $
+	  JNB TF0, $
+; 	CLR TR0
+	  CLR TR0
+; 	CLR TF0
+	  CLR TF0
+; 	#pragma endasm
+; }
+			; SOURCE LINE # 77
+	RET  	
+; END OF timer_delay30us
+
+; 
+; void timer_delay280us()  /* Timer0 delay function */
+
+	RSEG  ?PR?timer_delay280us?DELAY
+timer_delay280us:
+	USING	0
+			; SOURCE LINE # 79
+; {
+			; SOURCE LINE # 80
+; 	#pragma asm
+; 	MOV TMOD, #21H
+	  MOV TMOD, #21H
+; 	MOV TH0, #0FEH
+	  MOV TH0, #0FEH
+; 	MOV TL0, #0E8H
+	  MOV TL0, #0E8H
+; 	SETB TR0
+	  SETB TR0
+; 	JNB TF0, $
+	  JNB TF0, $
+; 	CLR TR0
+	  CLR TR0
+; 	CLR TF0
+	  CLR TF0
+; 	#pragma endasm
+; }
+			; SOURCE LINE # 90
+	RET  	
+; END OF timer_delay280us
+
+; 
+; 
+; void timer_delay40us()  /* Timer0 delay function */
+
+	RSEG  ?PR?timer_delay40us?DELAY
+timer_delay40us:
+	USING	0
+			; SOURCE LINE # 93
+; {
+			; SOURCE LINE # 94
+; 	#pragma asm
+; 	MOV TMOD, #21H
+	  MOV TMOD, #21H
+; 	MOV TH0, #0FFH
+	  MOV TH0, #0FFH
+; 	MOV TL0, #0D8H
+	  MOV TL0, #0D8H
+; 	SETB TR0
+	  SETB TR0
+; 	JNB TF0, $
+	  JNB TF0, $
+; 	CLR TR0
+	  CLR TR0
+; 	CLR TF0
+	  CLR TF0
+; 	#pragma endasm
+; }
+			; SOURCE LINE # 104
+	RET  	
+; END OF timer_delay40us
+
+; 
+; 
+; void timer_delay9680us()  /* Timer0 delay function */
+
+	RSEG  ?PR?timer_delay9680us?DELAY
+timer_delay9680us:
+	USING	0
+			; SOURCE LINE # 107
+; {	
+			; SOURCE LINE # 108
+; 	#pragma asm
+; 	MOV TMOD, #21H
+	  MOV TMOD, #21H
+; 	MOV TH0, #0DAH
+	  MOV TH0, #0DAH
+; 	MOV TL0, #030H
+	  MOV TL0, #030H
+; 	SETB TR0
+	  SETB TR0
+; 	JNB TF0, $
+	  JNB TF0, $
+; 	CLR TR0
+	  CLR TR0
+; 	CLR TF0
+	  CLR TF0
+; 	#pragma endasm
+; }			; SOURCE LINE # 118
+	RET  	
+; END OF timer_delay9680us
+
+	END

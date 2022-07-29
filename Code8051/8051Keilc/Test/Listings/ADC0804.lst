@@ -1,0 +1,50 @@
+C51 COMPILER V9.60.0.0   ADC0804                                                           03/18/2022 16:37:06 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE ADC0804
+NO OBJECT MODULE REQUESTED
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ADC0804.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\A
+                    -DC0804.lst) TABS(2) SRC(.\Objects\ADC0804.SRC)
+
+line level    source
+
+   1          #include <reg51.h>
+   2          #include "ADC0804.h"
+   3          #include "port.h"
+   4          
+   5          unsigned char ADC0804_Read()
+   6          {
+   7   1        unsigned char kq;
+   8   1        //Chon chip
+   9   1        ADC0804_CS = 0;
+  10   1        
+  11   1        //Tao xung bat dau chuyen doi
+  12   1        ADC0804_WR = 0;
+  13   1        ADC0804_WR = 1;
+  14   1        
+  15   1        //Doi chuyen doi xong
+  16   1        while(ADC0804_INTR);
+  17   1        
+  18   1        //Doc gia tri
+  19   1        ADC0804_RD = 0;
+  20   1        kq = ADC0804_DATA;
+  21   1        ADC0804_RD = 1;
+  22   1        
+  23   1        return kq;
+  24   1      }
+  25            
+  26            
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     16    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

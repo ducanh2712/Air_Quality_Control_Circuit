@@ -1,0 +1,250 @@
+A51 MACRO ASSEMBLER  ADC0804                                                              03/18/2022 16:37:07 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\ADC0804.OBJ
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE .\Objects\ADC0804.src PR(.\Listings\ADC0804.ls1) EP DEBUG
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     ; .\Objects\ADC0804.SRC generated from: ADC0804.c
+                       2     ; COMPILER INVOKED BY:
+                       3     ;        C:\Keil_v5\C51\BIN\C51.EXE ADC0804.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND P
+                             RINT(.\Listings\ADC0804.lst) TABS(2) SRC(.\Objects\ADC0804.SRC)
+                       4     
+                       5     $nomod51 
+                       6     
+                       7     NAME    ADC0804
+                       8     
+  0080                 9     P0      DATA    080H
+  0090                10     P1      DATA    090H
+  00A0                11     P2      DATA    0A0H
+  00B0                12     P3      DATA    0B0H
+  00B5                13     MQ05    BIT     0B0H.5
+  00B4                14     T0      BIT     0B0H.4
+  00D6                15     AC      BIT     0D0H.6
+  00B5                16     T1      BIT     0B0H.5
+  00AF                17     EA      BIT     0A8H.7
+  00B7                18     LED_LCD BIT     0B0H.7
+  0094                19     ADC0804_RD      BIT     090H.4
+  0093                20     ADC0804_CS      BIT     090H.3
+  00A8                21     IE      DATA    0A8H
+  0090                22     EN      BIT     090H.0
+  00B7                23     RD      BIT     0B0H.7
+  00AC                24     ES      BIT     0A8H.4
+  00B8                25     IP      DATA    0B8H
+  0098                26     RI      BIT     098H.0
+  00B2                27     INT0    BIT     0B0H.2
+  00D7                28     CY      BIT     0D0H.7
+  0099                29     TI      BIT     098H.1
+  00B3                30     INT1    BIT     0B0H.3
+  00B3                31     INT_LCD BIT     0B0H.3
+  0095                32     ADC0804_WR      BIT     090H.5
+  00BC                33     PS      BIT     0B8H.4
+  0081                34     SP      DATA    081H
+  0092                35     RS      BIT     090H.2
+  00D2                36     OV      BIT     0D0H.2
+  0091                37     RW      BIT     090H.1
+  00B6                38     WR      BIT     0B0H.6
+  0099                39     SBUF    DATA    099H
+  0087                40     PCON    DATA    087H
+  0098                41     SCON    DATA    098H
+  00B3                42     ADC0804_INTR    BIT     0B0H.3
+  0089                43     TMOD    DATA    089H
+  0088                44     TCON    DATA    088H
+  0089                45     IE0     BIT     088H.1
+  008B                46     IE1     BIT     088H.3
+  00F0                47     B       DATA    0F0H
+  00B4                48     DHT11   BIT     0B0H.4
+  00E0                49     ACC     DATA    0E0H
+  00B0                50     UART_RX BIT     0B0H.0
+  00A9                51     ET0     BIT     0A8H.1
+  00B1                52     UART_TX BIT     0B0H.1
+  00AB                53     ET1     BIT     0A8H.3
+  008D                54     TF0     BIT     088H.5
+  008F                55     TF1     BIT     088H.7
+  009A                56     RB8     BIT     098H.2
+  008C                57     TH0     DATA    08CH
+A51 MACRO ASSEMBLER  ADC0804                                                              03/18/2022 16:37:07 PAGE     2
+
+  00A8                58     EX0     BIT     0A8H.0
+  0088                59     IT0     BIT     088H.0
+  008D                60     TH1     DATA    08DH
+  009B                61     TB8     BIT     098H.3
+  00AA                62     EX1     BIT     0A8H.2
+  008A                63     IT1     BIT     088H.2
+  00D0                64     P       BIT     0D0H.0
+  009F                65     SM0     BIT     098H.7
+  008A                66     TL0     DATA    08AH
+  009E                67     SM1     BIT     098H.6
+  008B                68     TL1     DATA    08BH
+  009D                69     SM2     BIT     098H.5
+  00B9                70     PT0     BIT     0B8H.1
+  00BB                71     PT1     BIT     0B8H.3
+  00D3                72     RS0     BIT     0D0H.3
+  008C                73     TR0     BIT     088H.4
+  00D4                74     RS1     BIT     0D0H.4
+  008E                75     TR1     BIT     088H.6
+  00B8                76     PX0     BIT     0B8H.0
+  00BA                77     PX1     BIT     0B8H.2
+  0083                78     DPH     DATA    083H
+  0082                79     DPL     DATA    082H
+  009C                80     REN     BIT     098H.4
+  00B0                81     RXD     BIT     0B0H.0
+  00B1                82     TXD     BIT     0B0H.1
+  00B6                83     LED_GPMY        BIT     0B0H.6
+  00D5                84     F0      BIT     0D0H.5
+  00D0                85     PSW     DATA    0D0H
+                      86     ?PR?ADC0804_Read?ADC0804                 SEGMENT CODE 
+                      87             PUBLIC  ADC0804_Read
+                      88     ; #include <reg51.h>
+                      89     ; #include "ADC0804.h"
+                      90     ; #include "port.h"
+                      91     ; 
+                      92     ; unsigned char ADC0804_Read()
+                      93     
+----                  94             RSEG  ?PR?ADC0804_Read?ADC0804
+0000                  95     ADC0804_Read:
+                      96             USING   0
+                      97                             ; SOURCE LINE # 5
+                      98     ; {
+                      99                             ; SOURCE LINE # 6
+                     100     ;       unsigned char kq;
+                     101     ;       //Chon chip
+                     102     ;       ADC0804_CS = 0;
+                     103                             ; SOURCE LINE # 9
+0000 C293            104             CLR     ADC0804_CS
+                     105     ;       
+                     106     ;       //Tao xung bat dau chuyen doi
+                     107     ;       ADC0804_WR = 0;
+                     108                             ; SOURCE LINE # 12
+0002 C295            109             CLR     ADC0804_WR
+                     110     ;       ADC0804_WR = 1;
+                     111                             ; SOURCE LINE # 13
+0004 D295            112             SETB    ADC0804_WR
+0006                 113     ?C0001:
+                     114     ;       
+                     115     ;       //Doi chuyen doi xong
+                     116     ;       while(ADC0804_INTR);
+                     117                             ; SOURCE LINE # 16
+0006 20B3FD          118             JB      ADC0804_INTR,?C0001
+                     119     ;       
+                     120     ;       //Doc gia tri
+                     121     ;       ADC0804_RD = 0;
+                     122                             ; SOURCE LINE # 19
+0009 C294            123             CLR     ADC0804_RD
+A51 MACRO ASSEMBLER  ADC0804                                                              03/18/2022 16:37:07 PAGE     3
+
+                     124     ;       kq = ADC0804_DATA;
+                     125                             ; SOURCE LINE # 20
+                     126     ;---- Variable 'kq?040' assigned to Register 'R7' ----
+000B AFA0            127             MOV     R7,P2
+                     128     ;       ADC0804_RD = 1;
+                     129                             ; SOURCE LINE # 21
+000D D294            130             SETB    ADC0804_RD
+                     131     ;       
+                     132     ;       return kq;
+                     133                             ; SOURCE LINE # 23
+                     134     ; }
+                     135                             ; SOURCE LINE # 24
+000F 22              136             RET     
+                     137     ; END OF ADC0804_Read
+                     138     
+                     139             END
+A51 MACRO ASSEMBLER  ADC0804                                                              03/18/2022 16:37:07 PAGE     4
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E                   T Y P E  V A L U E   ATTRIBUTES
+
+?C0001 . . . . . . . . .  C ADDR   0006H   R   SEG=?PR?ADC0804_READ?ADC0804
+?PR?ADC0804_READ?ADC0804  C SEG    0010H       REL=UNIT
+AC . . . . . . . . . . .  B ADDR   00D0H.6 A   
+ACC. . . . . . . . . . .  D ADDR   00E0H   A   
+ADC0804. . . . . . . . .  N NUMB   -----       
+ADC0804_CS . . . . . . .  B ADDR   0090H.3 A   
+ADC0804_INTR . . . . . .  B ADDR   00B0H.3 A   
+ADC0804_RD . . . . . . .  B ADDR   0090H.4 A   
+ADC0804_READ . . . . . .  C ADDR   0000H   R   SEG=?PR?ADC0804_READ?ADC0804
+ADC0804_WR . . . . . . .  B ADDR   0090H.5 A   
+B. . . . . . . . . . . .  D ADDR   00F0H   A   
+CY . . . . . . . . . . .  B ADDR   00D0H.7 A   
+DHT11. . . . . . . . . .  B ADDR   00B0H.4 A   
+DPH. . . . . . . . . . .  D ADDR   0083H   A   
+DPL. . . . . . . . . . .  D ADDR   0082H   A   
+EA . . . . . . . . . . .  B ADDR   00A8H.7 A   
+EN . . . . . . . . . . .  B ADDR   0090H.0 A   
+ES . . . . . . . . . . .  B ADDR   00A8H.4 A   
+ET0. . . . . . . . . . .  B ADDR   00A8H.1 A   
+ET1. . . . . . . . . . .  B ADDR   00A8H.3 A   
+EX0. . . . . . . . . . .  B ADDR   00A8H.0 A   
+EX1. . . . . . . . . . .  B ADDR   00A8H.2 A   
+F0 . . . . . . . . . . .  B ADDR   00D0H.5 A   
+IE . . . . . . . . . . .  D ADDR   00A8H   A   
+IE0. . . . . . . . . . .  B ADDR   0088H.1 A   
+IE1. . . . . . . . . . .  B ADDR   0088H.3 A   
+INT0 . . . . . . . . . .  B ADDR   00B0H.2 A   
+INT1 . . . . . . . . . .  B ADDR   00B0H.3 A   
+INT_LCD. . . . . . . . .  B ADDR   00B0H.3 A   
+IP . . . . . . . . . . .  D ADDR   00B8H   A   
+IT0. . . . . . . . . . .  B ADDR   0088H.0 A   
+IT1. . . . . . . . . . .  B ADDR   0088H.2 A   
+LED_GPMY . . . . . . . .  B ADDR   00B0H.6 A   
+LED_LCD. . . . . . . . .  B ADDR   00B0H.7 A   
+MQ05 . . . . . . . . . .  B ADDR   00B0H.5 A   
+OV . . . . . . . . . . .  B ADDR   00D0H.2 A   
+P. . . . . . . . . . . .  B ADDR   00D0H.0 A   
+P0 . . . . . . . . . . .  D ADDR   0080H   A   
+P1 . . . . . . . . . . .  D ADDR   0090H   A   
+P2 . . . . . . . . . . .  D ADDR   00A0H   A   
+P3 . . . . . . . . . . .  D ADDR   00B0H   A   
+PCON . . . . . . . . . .  D ADDR   0087H   A   
+PS . . . . . . . . . . .  B ADDR   00B8H.4 A   
+PSW. . . . . . . . . . .  D ADDR   00D0H   A   
+PT0. . . . . . . . . . .  B ADDR   00B8H.1 A   
+PT1. . . . . . . . . . .  B ADDR   00B8H.3 A   
+PX0. . . . . . . . . . .  B ADDR   00B8H.0 A   
+PX1. . . . . . . . . . .  B ADDR   00B8H.2 A   
+RB8. . . . . . . . . . .  B ADDR   0098H.2 A   
+RD . . . . . . . . . . .  B ADDR   00B0H.7 A   
+REN. . . . . . . . . . .  B ADDR   0098H.4 A   
+RI . . . . . . . . . . .  B ADDR   0098H.0 A   
+RS . . . . . . . . . . .  B ADDR   0090H.2 A   
+RS0. . . . . . . . . . .  B ADDR   00D0H.3 A   
+RS1. . . . . . . . . . .  B ADDR   00D0H.4 A   
+RW . . . . . . . . . . .  B ADDR   0090H.1 A   
+RXD. . . . . . . . . . .  B ADDR   00B0H.0 A   
+SBUF . . . . . . . . . .  D ADDR   0099H   A   
+SCON . . . . . . . . . .  D ADDR   0098H   A   
+SM0. . . . . . . . . . .  B ADDR   0098H.7 A   
+A51 MACRO ASSEMBLER  ADC0804                                                              03/18/2022 16:37:07 PAGE     5
+
+SM1. . . . . . . . . . .  B ADDR   0098H.6 A   
+SM2. . . . . . . . . . .  B ADDR   0098H.5 A   
+SP . . . . . . . . . . .  D ADDR   0081H   A   
+T0 . . . . . . . . . . .  B ADDR   00B0H.4 A   
+T1 . . . . . . . . . . .  B ADDR   00B0H.5 A   
+TB8. . . . . . . . . . .  B ADDR   0098H.3 A   
+TCON . . . . . . . . . .  D ADDR   0088H   A   
+TF0. . . . . . . . . . .  B ADDR   0088H.5 A   
+TF1. . . . . . . . . . .  B ADDR   0088H.7 A   
+TH0. . . . . . . . . . .  D ADDR   008CH   A   
+TH1. . . . . . . . . . .  D ADDR   008DH   A   
+TI . . . . . . . . . . .  B ADDR   0098H.1 A   
+TL0. . . . . . . . . . .  D ADDR   008AH   A   
+TL1. . . . . . . . . . .  D ADDR   008BH   A   
+TMOD . . . . . . . . . .  D ADDR   0089H   A   
+TR0. . . . . . . . . . .  B ADDR   0088H.4 A   
+TR1. . . . . . . . . . .  B ADDR   0088H.6 A   
+TXD. . . . . . . . . . .  B ADDR   00B0H.1 A   
+UART_RX. . . . . . . . .  B ADDR   00B0H.0 A   
+UART_TX. . . . . . . . .  B ADDR   00B0H.1 A   
+WR . . . . . . . . . . .  B ADDR   00B0H.6 A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

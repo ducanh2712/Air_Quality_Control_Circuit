@@ -1,0 +1,843 @@
+; .\Objects\main.SRC generated from: main.c
+; COMPILER INVOKED BY:
+;        C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst) TABS(2) SRC(.\Objects\main.SRC)
+
+$NOMOD51
+
+NAME	MAIN
+
+P0	DATA	080H
+P1	DATA	090H
+P2	DATA	0A0H
+P3	DATA	0B0H
+MQ05	BIT	0B0H.5
+T0	BIT	0B0H.4
+AC	BIT	0D0H.6
+T1	BIT	0B0H.5
+EA	BIT	0A8H.7
+LED_LCD	BIT	0B0H.7
+ADC0804_RD	BIT	090H.4
+ADC0804_CS	BIT	090H.3
+IE	DATA	0A8H
+EN	BIT	090H.0
+RD	BIT	0B0H.7
+ES	BIT	0A8H.4
+IP	DATA	0B8H
+RI	BIT	098H.0
+INT0	BIT	0B0H.2
+CY	BIT	0D0H.7
+TI	BIT	098H.1
+INT1	BIT	0B0H.3
+INT_LCD	BIT	0B0H.3
+ADC0804_WR	BIT	090H.5
+PS	BIT	0B8H.4
+SP	DATA	081H
+RS	BIT	090H.2
+OV	BIT	0D0H.2
+RW	BIT	090H.1
+WR	BIT	0B0H.6
+SBUF	DATA	099H
+PCON	DATA	087H
+SCON	DATA	098H
+ADC0804_INTR	BIT	0B0H.3
+TMOD	DATA	089H
+TCON	DATA	088H
+led	BIT	0A0H.0
+IE0	BIT	088H.1
+IE1	BIT	088H.3
+B	DATA	0F0H
+DHT11	BIT	0B0H.4
+ACC	DATA	0E0H
+UART_RX	BIT	0B0H.0
+ET0	BIT	0A8H.1
+UART_TX	BIT	0B0H.1
+ET1	BIT	0A8H.3
+TF0	BIT	088H.5
+TF1	BIT	088H.7
+RB8	BIT	098H.2
+TH0	DATA	08CH
+EX0	BIT	0A8H.0
+IT0	BIT	088H.0
+TH1	DATA	08DH
+TB8	BIT	098H.3
+EX1	BIT	0A8H.2
+IT1	BIT	088H.2
+P	BIT	0D0H.0
+SM0	BIT	098H.7
+TL0	DATA	08AH
+SM1	BIT	098H.6
+TL1	DATA	08BH
+SM2	BIT	098H.5
+PT0	BIT	0B8H.1
+PT1	BIT	0B8H.3
+RS0	BIT	0D0H.3
+TR0	BIT	088H.4
+RS1	BIT	0D0H.4
+TR1	BIT	088H.6
+PX0	BIT	0B8H.0
+PX1	BIT	0B8H.2
+DPH	DATA	083H
+DPL	DATA	082H
+REN	BIT	098H.4
+RXD	BIT	0B0H.0
+TXD	BIT	0B0H.1
+LED_GPMY	BIT	0B0H.6
+F0	BIT	0D0H.5
+PSW	DATA	0D0H
+?PR?_reverse?MAIN    SEGMENT CODE 
+?DT?_reverse?MAIN    SEGMENT DATA OVERLAYABLE 
+?PR?_itoa?MAIN       SEGMENT CODE 
+?DT?_itoa?MAIN       SEGMENT DATA OVERLAYABLE 
+?PR?main?MAIN        SEGMENT CODE 
+?DT?main?MAIN        SEGMENT DATA OVERLAYABLE 
+?PR?get_DHT11?MAIN   SEGMENT CODE 
+?PR?get_GPMY?MAIN    SEGMENT CODE 
+?PR?get_MQ05?MAIN    SEGMENT CODE 
+?CO?MAIN             SEGMENT CODE 
+?DT?MAIN             SEGMENT DATA 
+	EXTRN	CODE (_LCD_String_xy)
+	EXTRN	CODE (_Uart_Write_Text)
+	EXTRN	CODE (Uart_Init)
+	EXTRN	CODE (timer_delay280us)
+	EXTRN	CODE (_strlen)
+	EXTRN	CODE (_LCD_String)
+	EXTRN	CODE (Receive_data)
+	EXTRN	CODE (LCD_Init)
+	EXTRN	CODE (_delay_ms)
+	EXTRN	CODE (Response)
+	EXTRN	CODE (timer_delay9680us)
+	EXTRN	CODE (timer_delay40us)
+	EXTRN	CODE (Request)
+	EXTRN	CODE (ADC0804_Read)
+	EXTRN	CODE (?C?CLDPTR)
+	EXTRN	CODE (?C?CSTPTR)
+	EXTRN	CODE (?C?SIDIV)
+	EXTRN	CODE (?C?CSTOPTR)
+	EXTRN	CODE (?C_STARTUP)
+	EXTRN	CODE (?C?UIDIV)
+	PUBLIC	adc_value_GPMY
+	PUBLIC	I_RH
+	PUBLIC	I_Temp
+	PUBLIC	D_RH
+	PUBLIC	D_Temp
+	PUBLIC	dat
+	PUBLIC	dustDensity
+	PUBLIC	CheckSum
+	PUBLIC	voltage_GPMY
+	PUBLIC	get_MQ05
+	PUBLIC	get_GPMY
+	PUBLIC	get_DHT11
+	PUBLIC	main
+	PUBLIC	_itoa
+	PUBLIC	_reverse
+
+	RSEG  ?DT?_reverse?MAIN
+?_reverse?BYTE:
+          s?040:   DS   3
+	ORG  3
+          j?041:   DS   3
+
+	RSEG  ?DT?main?MAIN
+?main?BYTE:
+        dat?247:   DS   20
+
+	RSEG  ?DT?_itoa?MAIN
+?_itoa?BYTE:
+          n?143:   DS   2
+	ORG  2
+          s?144:   DS   3
+	ORG  5
+          i?145:   DS   2
+	ORG  7
+       sign?146:   DS   2
+
+	RSEG  ?DT?MAIN
+   voltage_GPMY:   DS   2
+       CheckSum:   DS   2
+    dustDensity:   DS   2
+            dat:   DS   20
+         D_Temp:   DS   2
+           D_RH:   DS   2
+         I_Temp:   DS   2
+           I_RH:   DS   2
+ adc_value_GPMY:   DS   2
+
+	RSEG  ?CO?MAIN
+?SC_0:
+	DB  'E' ,'r' ,'r' ,'o' ,'r' ,000H
+
+?SC_6:
+	DB  'R' ,'H' ,':' ,000H
+
+?SC_10:
+	DB  ' ' ,'T' ,':' ,000H
+
+?SC_14:
+	DB  'B' ,'u' ,'i' ,' ' ,'m' ,'i' ,'n' ,':' ,000H
+
+?SC_23:
+	DB  ' ' ,'G' ,'A' ,'S' ,':' ,'0' ,000H
+
+?SC_30:
+	DB  '0' ,000H
+
+?SC_32:
+	DB  ' ' ,'G' ,'A' ,'S' ,':' ,'1' ,000H
+
+?SC_39:
+	DB  '1' ,000H
+
+; #include <reg51.h>
+; #include <stdio.h>
+; #include <string.h>
+; #include <stdlib.h>
+; #include "main.h"
+; #include "port.h"
+; #include "lcd.h"
+; #include "dht.h"
+; #include "delay.h"
+; #include "ADC0804.h"
+; #include "uart.h"
+; 
+; volatile int I_RH, D_RH, I_Temp, D_Temp, CheckSum;
+; volatile unsigned char dat[20];
+; volatile unsigned int adc_value_GPMY, voltage_GPMY, dustDensity;
+; 
+; sbit led = P2^0;
+; 
+; void get_DHT11();
+; void get_MQ05();
+; void get_GPMY();
+; 
+; void reverse(char *s){
+
+	RSEG  ?PR?_reverse?MAIN
+_reverse:
+	USING	0
+			; SOURCE LINE # 23
+	MOV  	s?040,R3
+	MOV  	s?040+01H,R2
+	MOV  	s?040+02H,R1
+;   char * j;
+;   int c;
+;   j = s + strlen(s) - 1;
+			; SOURCE LINE # 26
+	LCALL	_strlen
+	MOV  	A,s?040+02H
+	ADD  	A,R7
+	MOV  	R1,A
+	MOV  	A,s?040+01H
+	ADDC 	A,R6
+	MOV  	R2,A
+	MOV  	A,R1
+	ADD  	A,#0FFH
+	MOV  	R1,A
+	MOV  	A,R2
+	ADDC 	A,#0FFH
+	MOV  	j?041,s?040
+	MOV  	j?041+01H,A
+	MOV  	j?041+02H,R1
+?C0001:
+;   while (s < j) {
+			; SOURCE LINE # 27
+	CLR  	C
+	MOV  	DPH,j?041+01H
+	MOV  	DPL,j?041+02H
+	MOV  	A,s?040+02H
+	SUBB 	A,DPL
+	MOV  	A,s?040+01H
+	SUBB 	A,DPH
+?C0020:
+	JNC  	?C0003
+;     c = * s;
+			; SOURCE LINE # 28
+	MOV  	R3,s?040
+	MOV  	R2,s?040+01H
+	MOV  	R1,s?040+02H
+	LCALL	?C?CLDPTR
+	MOV  	R7,A
+	RLC  	A
+	SUBB 	A,ACC
+	MOV  	R6,A
+;---- Variable 'c?042' assigned to Register 'R6/R7' ----
+;     * s++ = * j;
+			; SOURCE LINE # 29
+	MOV  	R3,j?041
+	MOV  	R2,j?041+01H
+	MOV  	R1,j?041+02H
+	LCALL	?C?CLDPTR
+	MOV  	R5,A
+	MOV  	R3,s?040
+	INC  	s?040+02H
+	MOV  	A,s?040+02H
+	MOV  	R2,s?040+01H
+	JNZ  	?C0021
+	INC  	s?040+01H
+?C0021:
+	DEC  	A
+	MOV  	R1,A
+	MOV  	A,R5
+	LCALL	?C?CSTPTR
+;     * j-- = c;
+			; SOURCE LINE # 30
+	MOV  	R5,AR7
+	MOV  	R3,j?041
+	MOV  	A,j?041+02H
+	DEC  	j?041+02H
+	MOV  	R2,j?041+01H
+	JNZ  	?C0022
+	DEC  	j?041+01H
+?C0022:
+	MOV  	R1,A
+	MOV  	A,R5
+	LCALL	?C?CSTPTR
+;   }
+			; SOURCE LINE # 31
+	SJMP 	?C0001
+; }
+			; SOURCE LINE # 32
+?C0003:
+	RET  	
+; END OF _reverse
+
+; 
+; void itoa(int n, char s[]) {
+
+	RSEG  ?PR?_itoa?MAIN
+_itoa:
+	USING	0
+			; SOURCE LINE # 34
+	MOV  	n?143,R6
+	MOV  	n?143+01H,R7
+	MOV  	s?144,R3
+	MOV  	s?144+01H,R2
+	MOV  	s?144+02H,R1
+;   int i, sign;
+; 
+;   if ((sign = n) < 0) 
+			; SOURCE LINE # 37
+	MOV  	sign?146,R6
+	MOV  	sign?146+01H,R7
+	CLR  	C
+	MOV  	A,R6
+	XRL  	A,#080H
+	SUBB 	A,#080H
+	JNC  	?C0004
+;     n = -n; 
+			; SOURCE LINE # 38
+	CLR  	C
+	CLR  	A
+	SUBB 	A,n?143+01H
+	MOV  	n?143+01H,A
+	CLR  	A
+	SUBB 	A,n?143
+	MOV  	n?143,A
+?C0004:
+;   i = 0;
+			; SOURCE LINE # 39
+	CLR  	A
+	MOV  	i?145,A
+	MOV  	i?145+01H,A
+?C0007:
+;   do {
+			; SOURCE LINE # 40
+;     s[i++] = n % 10 + '0';
+			; SOURCE LINE # 41
+	MOV  	R6,n?143
+	MOV  	R7,n?143+01H
+	MOV  	R4,#00H
+	MOV  	R5,#0AH
+	LCALL	?C?SIDIV
+	MOV  	A,R5
+	ADD  	A,#030H
+	MOV  	R7,A
+	MOV  	R3,s?144
+	MOV  	R2,s?144+01H
+	MOV  	R1,s?144+02H
+	INC  	i?145+01H
+	MOV  	A,i?145+01H
+	MOV  	R4,i?145
+	JNZ  	?C0023
+	INC  	i?145
+?C0023:
+	DEC  	A
+	MOV  	DPL,A
+	MOV  	DPH,R4
+	MOV  	A,R7
+	LCALL	?C?CSTOPTR
+;   } while ((n /= 10) > 0); 
+			; SOURCE LINE # 42
+	MOV  	R6,n?143
+	MOV  	R7,n?143+01H
+	MOV  	R4,#00H
+	MOV  	R5,#0AH
+	LCALL	?C?SIDIV
+	MOV  	n?143,R6
+	MOV  	n?143+01H,R7
+	SETB 	C
+	MOV  	A,R7
+	SUBB 	A,#00H
+	MOV  	A,R6
+	XRL  	A,#080H
+	SUBB 	A,#080H
+	JNC  	?C0007
+;   if (sign < 0)
+			; SOURCE LINE # 43
+	CLR  	C
+	MOV  	A,sign?146
+	XRL  	A,#080H
+	SUBB 	A,#080H
+	JNC  	?C0008
+;     s[i++] = '-';
+			; SOURCE LINE # 44
+	MOV  	R3,s?144
+	MOV  	R2,s?144+01H
+	MOV  	R1,s?144+02H
+	INC  	i?145+01H
+	MOV  	A,i?145+01H
+	MOV  	R6,i?145
+	JNZ  	?C0024
+	INC  	i?145
+?C0024:
+	DEC  	A
+	MOV  	DPL,A
+	MOV  	DPH,R6
+	MOV  	A,#02DH
+	LCALL	?C?CSTOPTR
+?C0008:
+;   s[i] = '\0';
+			; SOURCE LINE # 45
+	MOV  	R3,s?144
+	MOV  	R2,s?144+01H
+	MOV  	R1,s?144+02H
+	MOV  	DPL,i?145+01H
+	MOV  	DPH,i?145
+	CLR  	A
+	LCALL	?C?CSTOPTR
+;   reverse(s);
+			; SOURCE LINE # 46
+	LJMP 	_reverse
+; END OF _itoa
+
+; }
+; 
+; void main() {
+
+	RSEG  ?PR?main?MAIN
+main:
+	USING	0
+			; SOURCE LINE # 49
+; 	
+; 	Uart_Init();
+			; SOURCE LINE # 51
+	LCALL	Uart_Init
+;   
+; 	LCD_Init();
+			; SOURCE LINE # 53
+	LCALL	LCD_Init
+?C0010:
+;   while (1) {
+			; SOURCE LINE # 54
+; 		volatile unsigned char dat[20];
+; 		get_DHT11();
+			; SOURCE LINE # 56
+	LCALL	get_DHT11
+; 		get_MQ05();
+			; SOURCE LINE # 57
+	LCALL	get_MQ05
+; 		get_GPMY();
+			; SOURCE LINE # 58
+	LCALL	get_GPMY
+; 		delay_ms(1000);
+			; SOURCE LINE # 59
+	MOV  	R7,#0E8H
+	MOV  	R6,#03H
+	LCALL	_delay_ms
+;     
+;   }
+			; SOURCE LINE # 61
+	SJMP 	?C0010
+; END OF main
+
+; }
+; 
+; void get_DHT11() {
+
+	RSEG  ?PR?get_DHT11?MAIN
+get_DHT11:
+	USING	0
+			; SOURCE LINE # 64
+;   Request();
+			; SOURCE LINE # 65
+	LCALL	Request
+;   Response();
+			; SOURCE LINE # 66
+	LCALL	Response
+; 
+;   I_RH = Receive_data();
+			; SOURCE LINE # 68
+	LCALL	Receive_data
+	MOV  	I_RH,R6
+	MOV  	I_RH+01H,R7
+;   D_RH = Receive_data();
+			; SOURCE LINE # 69
+	LCALL	Receive_data
+	MOV  	D_RH,R6
+	MOV  	D_RH+01H,R7
+;   I_Temp = Receive_data();
+			; SOURCE LINE # 70
+	LCALL	Receive_data
+	MOV  	I_Temp,R6
+	MOV  	I_Temp+01H,R7
+;   D_Temp = Receive_data();
+			; SOURCE LINE # 71
+	LCALL	Receive_data
+	MOV  	D_Temp,R6
+	MOV  	D_Temp+01H,R7
+;   CheckSum = Receive_data();
+			; SOURCE LINE # 72
+	LCALL	Receive_data
+	MOV  	CheckSum,R6
+	MOV  	CheckSum+01H,R7
+; 	
+;   if ((I_RH + D_RH + I_Temp + D_Temp) != CheckSum) {
+			; SOURCE LINE # 74
+	MOV  	A,I_RH+01H
+	ADD  	A,D_RH+01H
+	MOV  	R7,A
+	MOV  	A,I_RH
+	ADDC 	A,D_RH
+	MOV  	R6,A
+	MOV  	A,I_Temp+01H
+	ADD  	A,R7
+	MOV  	R7,A
+	MOV  	A,I_Temp
+	ADDC 	A,R6
+	MOV  	R6,A
+	MOV  	A,D_Temp+01H
+	ADD  	A,R7
+	MOV  	R7,A
+	MOV  	A,D_Temp
+	ADDC 	A,R6
+	MOV  	R6,A
+	MOV  	A,R7
+	XRL  	A,CheckSum+01H
+	JNZ  	?C0025
+	MOV  	A,R6
+	XRL  	A,CheckSum
+?C0025:
+	JZ   	?C0013
+; 		LCD_String_xy(1,1,"Error");
+			; SOURCE LINE # 75
+	MOV  	R3,#0FFH
+	MOV  	R2,#HIGH (?SC_0)
+	MOV  	R1,#LOW (?SC_0)
+	MOV  	R5,#01H
+	MOV  	R7,#01H
+	LJMP 	_LCD_String_xy
+; 	}
+			; SOURCE LINE # 76
+?C0013:
+;   else{
+			; SOURCE LINE # 77
+; 		itoa(I_RH, dat);
+			; SOURCE LINE # 78
+	MOV  	R3,#00H
+	MOV  	R2,#HIGH (dat)
+	MOV  	R1,#LOW (dat)
+	MOV  	R7,I_RH+01H
+	MOV  	R6,I_RH
+	LCALL	_itoa
+; 		LCD_String_xy(1,1,"RH:");
+			; SOURCE LINE # 79
+	MOV  	R3,#0FFH
+	MOV  	R2,#HIGH (?SC_6)
+	MOV  	R1,#LOW (?SC_6)
+	MOV  	R5,#01H
+	MOV  	R7,#01H
+	LCALL	_LCD_String_xy
+; 		LCD_String(dat);
+			; SOURCE LINE # 80
+	MOV  	R3,#00H
+	MOV  	R2,#HIGH (dat)
+	MOV  	R1,#LOW (dat)
+	LCALL	_LCD_String
+; 		itoa(I_Temp, dat);
+			; SOURCE LINE # 81
+	MOV  	R3,#00H
+	MOV  	R2,#HIGH (dat)
+	MOV  	R1,#LOW (dat)
+	MOV  	R7,I_Temp+01H
+	MOV  	R6,I_Temp
+	LCALL	_itoa
+; 		LCD_String(" T:");
+			; SOURCE LINE # 82
+	MOV  	R3,#0FFH
+	MOV  	R2,#HIGH (?SC_10)
+	MOV  	R1,#LOW (?SC_10)
+	LCALL	_LCD_String
+; 		LCD_String(dat);
+			; SOURCE LINE # 83
+	MOV  	R3,#00H
+	MOV  	R2,#HIGH (dat)
+	MOV  	R1,#LOW (dat)
+	LCALL	_LCD_String
+; 		itoa(I_RH/10, dat);
+			; SOURCE LINE # 84
+	MOV  	R6,I_RH
+	MOV  	R7,I_RH+01H
+	MOV  	R4,#00H
+	MOV  	R5,#0AH
+	LCALL	?C?SIDIV
+	MOV  	R3,#00H
+	MOV  	R2,#HIGH (dat)
+	MOV  	R1,#LOW (dat)
+	LCALL	_itoa
+; 		Uart_Write_Text(dat);
+			; SOURCE LINE # 85
+	MOV  	R3,#00H
+	MOV  	R2,#HIGH (dat)
+	MOV  	R1,#LOW (dat)
+	LCALL	_Uart_Write_Text
+;     itoa(I_RH%10, dat);
+			; SOURCE LINE # 86
+	MOV  	R6,I_RH
+	MOV  	R7,I_RH+01H
+	MOV  	R4,#00H
+	MOV  	R5,#0AH
+	LCALL	?C?SIDIV
+	MOV  	R6,AR4
+	MOV  	R7,AR5
+	MOV  	R3,#00H
+	MOV  	R2,#HIGH (dat)
+	MOV  	R1,#LOW (dat)
+	LCALL	_itoa
+;     Uart_Write_Text(dat);
+			; SOURCE LINE # 87
+	MOV  	R3,#00H
+	MOV  	R2,#HIGH (dat)
+	MOV  	R1,#LOW (dat)
+	LCALL	_Uart_Write_Text
+; 		itoa(I_Temp/10, dat);
+			; SOURCE LINE # 88
+	MOV  	R6,I_Temp
+	MOV  	R7,I_Temp+01H
+	MOV  	R4,#00H
+	MOV  	R5,#0AH
+	LCALL	?C?SIDIV
+	MOV  	R3,#00H
+	MOV  	R2,#HIGH (dat)
+	MOV  	R1,#LOW (dat)
+	LCALL	_itoa
+;     Uart_Write_Text(dat);
+			; SOURCE LINE # 89
+	MOV  	R3,#00H
+	MOV  	R2,#HIGH (dat)
+	MOV  	R1,#LOW (dat)
+	LCALL	_Uart_Write_Text
+;     itoa(I_Temp%10, dat);
+			; SOURCE LINE # 90
+	MOV  	R6,I_Temp
+	MOV  	R7,I_Temp+01H
+	MOV  	R4,#00H
+	MOV  	R5,#0AH
+	LCALL	?C?SIDIV
+	MOV  	R6,AR4
+	MOV  	R7,AR5
+	MOV  	R3,#00H
+	MOV  	R2,#HIGH (dat)
+	MOV  	R1,#LOW (dat)
+	LCALL	_itoa
+;     Uart_Write_Text(dat);
+			; SOURCE LINE # 91
+	MOV  	R3,#00H
+	MOV  	R2,#HIGH (dat)
+	MOV  	R1,#LOW (dat)
+	LCALL	_Uart_Write_Text
+; 		delay_ms(500);	
+			; SOURCE LINE # 92
+	MOV  	R7,#0F4H
+	MOV  	R6,#01H
+	LCALL	_delay_ms
+;   }
+			; SOURCE LINE # 93
+; }
+			; SOURCE LINE # 94
+?C0015:
+	RET  	
+; END OF get_DHT11
+
+; 
+; void get_GPMY() {
+
+	RSEG  ?PR?get_GPMY?MAIN
+get_GPMY:
+	USING	0
+			; SOURCE LINE # 96
+; 	
+; 	LCD_String_xy(2,1,"Bui min:");
+			; SOURCE LINE # 98
+	MOV  	R3,#0FFH
+	MOV  	R2,#HIGH (?SC_14)
+	MOV  	R1,#LOW (?SC_14)
+	MOV  	R5,#01H
+	MOV  	R7,#02H
+	LCALL	_LCD_String_xy
+;   LED_GPMY = 1;
+			; SOURCE LINE # 99
+	SETB 	LED_GPMY
+;   timer_delay280us();
+			; SOURCE LINE # 100
+	LCALL	timer_delay280us
+;   voltage_GPMY = ADC0804_Read();
+			; SOURCE LINE # 101
+	LCALL	ADC0804_Read
+	MOV  	voltage_GPMY,#00H
+	MOV  	voltage_GPMY+01H,R7
+;   timer_delay40us();
+			; SOURCE LINE # 102
+	LCALL	timer_delay40us
+;   LED_GPMY = 0;
+			; SOURCE LINE # 103
+	CLR  	LED_GPMY
+;   timer_delay9680us();
+			; SOURCE LINE # 104
+	LCALL	timer_delay9680us
+; 	
+; 	itoa(voltage_GPMY/100, dat);
+			; SOURCE LINE # 106
+	MOV  	R6,voltage_GPMY
+	MOV  	R7,voltage_GPMY+01H
+	MOV  	R4,#00H
+	MOV  	R5,#064H
+	LCALL	?C?UIDIV
+	MOV  	R3,#00H
+	MOV  	R2,#HIGH (dat)
+	MOV  	R1,#LOW (dat)
+	LCALL	_itoa
+; 	LCD_String(dat);
+			; SOURCE LINE # 107
+	MOV  	R3,#00H
+	MOV  	R2,#HIGH (dat)
+	MOV  	R1,#LOW (dat)
+	LCALL	_LCD_String
+;   Uart_Write_Text(dat);
+			; SOURCE LINE # 108
+	MOV  	R3,#00H
+	MOV  	R2,#HIGH (dat)
+	MOV  	R1,#LOW (dat)
+	LCALL	_Uart_Write_Text
+; 	itoa((voltage_GPMY/10)%10, dat);
+			; SOURCE LINE # 109
+	MOV  	R6,voltage_GPMY
+	MOV  	R7,voltage_GPMY+01H
+	MOV  	R4,#00H
+	MOV  	R5,#0AH
+	LCALL	?C?UIDIV
+	MOV  	R4,#00H
+	MOV  	R5,#0AH
+	LCALL	?C?UIDIV
+	MOV  	R6,AR4
+	MOV  	R7,AR5
+	MOV  	R3,#00H
+	MOV  	R2,#HIGH (dat)
+	MOV  	R1,#LOW (dat)
+	LCALL	_itoa
+; 	LCD_String(dat);
+			; SOURCE LINE # 110
+	MOV  	R3,#00H
+	MOV  	R2,#HIGH (dat)
+	MOV  	R1,#LOW (dat)
+	LCALL	_LCD_String
+; 	Uart_Write_Text(dat);
+			; SOURCE LINE # 111
+	MOV  	R3,#00H
+	MOV  	R2,#HIGH (dat)
+	MOV  	R1,#LOW (dat)
+	LCALL	_Uart_Write_Text
+; 	itoa(voltage_GPMY%10, dat);
+			; SOURCE LINE # 112
+	MOV  	R6,voltage_GPMY
+	MOV  	R7,voltage_GPMY+01H
+	MOV  	R4,#00H
+	MOV  	R5,#0AH
+	LCALL	?C?UIDIV
+	MOV  	R6,AR4
+	MOV  	R7,AR5
+	MOV  	R3,#00H
+	MOV  	R2,#HIGH (dat)
+	MOV  	R1,#LOW (dat)
+	LCALL	_itoa
+; 	LCD_String(dat);
+			; SOURCE LINE # 113
+	MOV  	R3,#00H
+	MOV  	R2,#HIGH (dat)
+	MOV  	R1,#LOW (dat)
+	LCALL	_LCD_String
+; 	Uart_Write_Text(dat);
+			; SOURCE LINE # 114
+	MOV  	R3,#00H
+	MOV  	R2,#HIGH (dat)
+	MOV  	R1,#LOW (dat)
+	LCALL	_Uart_Write_Text
+; 	delay_ms(500);
+			; SOURCE LINE # 115
+	MOV  	R7,#0F4H
+	MOV  	R6,#01H
+	LJMP 	_delay_ms
+; END OF get_GPMY
+
+; }
+; 
+; void get_MQ05() {
+
+	RSEG  ?PR?get_MQ05?MAIN
+get_MQ05:
+	USING	0
+			; SOURCE LINE # 118
+;   if (MQ05)
+			; SOURCE LINE # 119
+	MOV  	R3,#0FFH
+	JNB  	MQ05,?C0017
+; 	{
+			; SOURCE LINE # 120
+; 		LCD_String(" GAS:0");
+			; SOURCE LINE # 121
+	MOV  	R2,#HIGH (?SC_23)
+	MOV  	R1,#LOW (?SC_23)
+	LCALL	_LCD_String
+; 		Uart_Write_Text("0");
+			; SOURCE LINE # 122
+	MOV  	R3,#0FFH
+	MOV  	R2,#HIGH (?SC_30)
+	MOV  	R1,#LOW (?SC_30)
+; 	}
+			; SOURCE LINE # 123
+	SJMP 	?C0026
+?C0017:
+;   else
+; 	{
+			; SOURCE LINE # 125
+; 		LCD_String(" GAS:1");
+			; SOURCE LINE # 126
+	MOV  	R2,#HIGH (?SC_32)
+	MOV  	R1,#LOW (?SC_32)
+	LCALL	_LCD_String
+; 		Uart_Write_Text("1");
+			; SOURCE LINE # 127
+	MOV  	R3,#0FFH
+	MOV  	R2,#HIGH (?SC_39)
+	MOV  	R1,#LOW (?SC_39)
+?C0026:
+	LCALL	_Uart_Write_Text
+; 	}
+			; SOURCE LINE # 128
+?C0018:
+; 	delay_ms(500);
+			; SOURCE LINE # 129
+	MOV  	R7,#0F4H
+	MOV  	R6,#01H
+	LJMP 	_delay_ms
+; END OF get_MQ05
+
+	END

@@ -1,0 +1,250 @@
+; .\Objects\uart.SRC generated from: uart.c
+; COMPILER INVOKED BY:
+;        C:\Keil_v5\C51\BIN\C51.EXE uart.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\uart.lst) TABS(2) SRC(.\Objects\uart.SRC)
+
+$NOMOD51
+
+NAME	UART
+
+P0	DATA	080H
+P1	DATA	090H
+P2	DATA	0A0H
+P3	DATA	0B0H
+MQ05	BIT	0B0H.5
+T0	BIT	0B0H.4
+AC	BIT	0D0H.6
+T1	BIT	0B0H.5
+EA	BIT	0A8H.7
+LED_LCD	BIT	0B0H.7
+ADC0804_RD	BIT	090H.4
+ADC0804_CS	BIT	090H.3
+IE	DATA	0A8H
+EN	BIT	090H.0
+RD	BIT	0B0H.7
+ES	BIT	0A8H.4
+IP	DATA	0B8H
+RI	BIT	098H.0
+INT0	BIT	0B0H.2
+CY	BIT	0D0H.7
+TI	BIT	098H.1
+INT1	BIT	0B0H.3
+INT_LCD	BIT	0B0H.3
+ADC0804_WR	BIT	090H.5
+PS	BIT	0B8H.4
+SP	DATA	081H
+RS	BIT	090H.2
+OV	BIT	0D0H.2
+RW	BIT	090H.1
+WR	BIT	0B0H.6
+SBUF	DATA	099H
+PCON	DATA	087H
+SCON	DATA	098H
+ADC0804_INTR	BIT	0B0H.3
+TMOD	DATA	089H
+TCON	DATA	088H
+IE0	BIT	088H.1
+IE1	BIT	088H.3
+B	DATA	0F0H
+DHT11	BIT	0B0H.4
+ACC	DATA	0E0H
+UART_RX	BIT	0B0H.0
+ET0	BIT	0A8H.1
+UART_TX	BIT	0B0H.1
+ET1	BIT	0A8H.3
+TF0	BIT	088H.5
+TF1	BIT	088H.7
+RB8	BIT	098H.2
+TH0	DATA	08CH
+EX0	BIT	0A8H.0
+IT0	BIT	088H.0
+TH1	DATA	08DH
+TB8	BIT	098H.3
+EX1	BIT	0A8H.2
+IT1	BIT	088H.2
+P	BIT	0D0H.0
+SM0	BIT	098H.7
+TL0	DATA	08AH
+SM1	BIT	098H.6
+TL1	DATA	08BH
+SM2	BIT	098H.5
+PT0	BIT	0B8H.1
+PT1	BIT	0B8H.3
+RS0	BIT	0D0H.3
+TR0	BIT	088H.4
+RS1	BIT	0D0H.4
+TR1	BIT	088H.6
+PX0	BIT	0B8H.0
+PX1	BIT	0B8H.2
+DPH	DATA	083H
+DPL	DATA	082H
+REN	BIT	098H.4
+RXD	BIT	0B0H.0
+TXD	BIT	0B0H.1
+LED_GPMY	BIT	0B0H.6
+F0	BIT	0D0H.5
+PSW	DATA	0D0H
+?PR?Uart_Init?UART   SEGMENT CODE 
+?PR?_Uart_Write?UART SEGMENT CODE 
+?PR?_Uart_Write_Text?UART                SEGMENT CODE 
+?DT?_Uart_Write_Text?UART                SEGMENT DATA OVERLAYABLE 
+?PR?Uart_Data_Ready?UART                 SEGMENT CODE 
+?PR?Uart_Read?UART   SEGMENT CODE 
+	EXTRN	CODE (?C?CLDOPTR)
+	PUBLIC	Uart_Read
+	PUBLIC	Uart_Data_Ready
+	PUBLIC	_Uart_Write_Text
+	PUBLIC	_Uart_Write
+	PUBLIC	Uart_Init
+
+	RSEG  ?DT?_Uart_Write_Text?UART
+?_Uart_Write_Text?BYTE:
+        str?241:   DS   3
+; #include <reg51.h>
+; #include "uart.h"
+; #include "port.h"
+; #include <stdio.h>
+; 
+; void Uart_Init()
+
+	RSEG  ?PR?Uart_Init?UART
+Uart_Init:
+			; SOURCE LINE # 6
+; {
+			; SOURCE LINE # 7
+; 		// Khoi tao UART o mode 1, 1200 baud
+; 	SM0 = 0; SM1 = 1;		// Chon UART mode 1
+			; SOURCE LINE # 9
+	CLR  	SM0
+	SETB 	SM1
+; 	TMOD = 0x21;            // 0010 xxxx - Timer1 hoat dong o che do 8bit tu dong nap lai
+			; SOURCE LINE # 10
+	MOV  	TMOD,#021H
+; 	TH1 = 0xE6;				// Toc do baud 1200
+			; SOURCE LINE # 11
+	MOV  	TH1,#0E6H
+; 	TR1 = 1;				// Timer1 bat dau chay
+			; SOURCE LINE # 12
+	SETB 	TR1
+; 	TI = 1;					// San sang gui du lieu
+			; SOURCE LINE # 13
+	SETB 	TI
+; }
+			; SOURCE LINE # 14
+	RET  	
+; END OF Uart_Init
+
+; 
+; void Uart_Write(char c)
+
+	RSEG  ?PR?_Uart_Write?UART
+_Uart_Write:
+			; SOURCE LINE # 16
+;---- Variable 'c?140' assigned to Register 'R7' ----
+; {
+			; SOURCE LINE # 17
+; 	SBUF = c;
+			; SOURCE LINE # 18
+	MOV  	SBUF,R7
+?C0002:
+;  	while(TI == 0);
+			; SOURCE LINE # 19
+	JNB  	TI,?C0002
+; 	TI = 0;
+			; SOURCE LINE # 20
+	CLR  	TI
+; 	
+; 	
+; }
+			; SOURCE LINE # 23
+	RET  	
+; END OF _Uart_Write
+
+; 
+; void Uart_Write_Text(char * str)
+
+	RSEG  ?PR?_Uart_Write_Text?UART
+_Uart_Write_Text:
+	USING	0
+			; SOURCE LINE # 25
+	MOV  	str?241,R3
+	MOV  	str?241+01H,R2
+	MOV  	str?241+02H,R1
+; {
+			; SOURCE LINE # 26
+; 	unsigned char i = 0;
+			; SOURCE LINE # 27
+;---- Variable 'i?242' assigned to Register 'R6' ----
+	CLR  	A
+	MOV  	R6,A
+?C0005:
+;  	while(str[i]!=0)
+			; SOURCE LINE # 28
+	MOV  	R3,str?241
+	MOV  	R2,str?241+01H
+	MOV  	R1,str?241+02H
+	MOV  	DPL,R6
+	MOV  	DPH,#00H
+	LCALL	?C?CLDOPTR
+	MOV  	R7,A
+	MOV  	R5,A
+	RLC  	A
+	SUBB 	A,ACC
+	ORL  	A,R5
+	JZ   	?C0007
+; 	{
+			; SOURCE LINE # 29
+; 		Uart_Write(str[i]);
+			; SOURCE LINE # 30
+	LCALL	_Uart_Write
+; 		i++;
+			; SOURCE LINE # 31
+	INC  	R6
+; 	}
+			; SOURCE LINE # 32
+	SJMP 	?C0005
+; }
+			; SOURCE LINE # 33
+?C0007:
+	RET  	
+; END OF _Uart_Write_Text
+
+; 
+; char Uart_Data_Ready()
+
+	RSEG  ?PR?Uart_Data_Ready?UART
+Uart_Data_Ready:
+	USING	0
+			; SOURCE LINE # 35
+; {
+			; SOURCE LINE # 36
+; 	return RI;
+			; SOURCE LINE # 37
+	MOV  	C,RI
+	CLR  	A
+	RLC  	A
+	MOV  	R7,A
+; }
+			; SOURCE LINE # 38
+	RET  	
+; END OF Uart_Data_Ready
+
+; 
+; char Uart_Read()
+
+	RSEG  ?PR?Uart_Read?UART
+Uart_Read:
+	USING	0
+			; SOURCE LINE # 40
+; {
+			; SOURCE LINE # 41
+; 	RI = 0;
+			; SOURCE LINE # 42
+	CLR  	RI
+; 	return SBUF;
+			; SOURCE LINE # 43
+	MOV  	R7,SBUF
+; }			; SOURCE LINE # 44
+	RET  	
+; END OF Uart_Read
+
+	END

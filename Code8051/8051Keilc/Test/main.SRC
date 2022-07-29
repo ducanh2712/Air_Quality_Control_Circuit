@@ -1,0 +1,299 @@
+; .\main.SRC generated from: main.c
+; COMPILER INVOKED BY:
+;        C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst) TABS(2) SRC(.\main.SRC)
+
+$NOMOD51
+
+NAME	MAIN
+
+P0	DATA	080H
+P1	DATA	090H
+P2	DATA	0A0H
+P3	DATA	0B0H
+MQ05	BIT	0B0H.5
+T0	BIT	0B0H.4
+AC	BIT	0D0H.6
+T1	BIT	0B0H.5
+EA	BIT	0A8H.7
+LED_LCD	BIT	0B0H.7
+ADC0804_RD	BIT	090H.4
+ADC0804_CS	BIT	090H.3
+IE	DATA	0A8H
+EN	BIT	090H.2
+RD	BIT	0B0H.7
+ES	BIT	0A8H.4
+IP	DATA	0B8H
+RI	BIT	098H.0
+INT0	BIT	0B0H.2
+CY	BIT	0D0H.7
+TI	BIT	098H.1
+INT1	BIT	0B0H.3
+INT_LCD	BIT	0B0H.3
+ADC0804_WR	BIT	090H.5
+PS	BIT	0B8H.4
+SP	DATA	081H
+RS	BIT	090H.0
+OV	BIT	0D0H.2
+RW	BIT	090H.1
+WR	BIT	0B0H.6
+SBUF	DATA	099H
+PCON	DATA	087H
+SCON	DATA	098H
+ADC0804_INTR	BIT	090H.6
+TMOD	DATA	089H
+TCON	DATA	088H
+IE0	BIT	088H.1
+IE1	BIT	088H.3
+B	DATA	0F0H
+DHT11	BIT	0B0H.4
+ACC	DATA	0E0H
+UART_RX	BIT	0B0H.0
+ET0	BIT	0A8H.1
+UART_TX	BIT	0B0H.1
+ET1	BIT	0A8H.3
+TF0	BIT	088H.5
+TF1	BIT	088H.7
+RB8	BIT	098H.2
+TH0	DATA	08CH
+EX0	BIT	0A8H.0
+IT0	BIT	088H.0
+TH1	DATA	08DH
+TB8	BIT	098H.3
+EX1	BIT	0A8H.2
+IT1	BIT	088H.2
+P	BIT	0D0H.0
+SM0	BIT	098H.7
+TL0	DATA	08AH
+SM1	BIT	098H.6
+TL1	DATA	08BH
+SM2	BIT	098H.5
+PT0	BIT	0B8H.1
+PT1	BIT	0B8H.3
+RS0	BIT	0D0H.3
+TR0	BIT	088H.4
+RS1	BIT	0D0H.4
+TR1	BIT	088H.6
+PX0	BIT	0B8H.0
+LED_GP2Y	BIT	0B0H.6
+PX1	BIT	0B8H.2
+DPH	DATA	083H
+DPL	DATA	082H
+REN	BIT	098H.4
+RXD	BIT	0B0H.0
+TXD	BIT	0B0H.1
+F0	BIT	0D0H.5
+PSW	DATA	0D0H
+?PR?main?MAIN        SEGMENT CODE 
+?PR?get_DHT11?MAIN   SEGMENT CODE 
+?CO?MAIN             SEGMENT CODE 
+?DT?MAIN             SEGMENT DATA 
+	EXTRN	CODE (_LCD_String_xy)
+	EXTRN	CODE (_sprintf)
+	EXTRN	DATA (?_sprintf?BYTE)
+	EXTRN	CODE (Receive_data)
+	EXTRN	CODE (LCD_Init)
+	EXTRN	CODE (_delay_ms)
+	EXTRN	CODE (Response)
+	EXTRN	CODE (Request)
+	EXTRN	CODE (?C_STARTUP)
+	PUBLIC	adc_value_GPMY
+	PUBLIC	I_RH
+	PUBLIC	I_Temp
+	PUBLIC	D_RH
+	PUBLIC	D_Temp
+	PUBLIC	dat
+	PUBLIC	dustDensity
+	PUBLIC	CheckSum
+	PUBLIC	voltage_GPMY
+	PUBLIC	get_DHT11
+	PUBLIC	main
+
+	RSEG  ?DT?MAIN
+   voltage_GPMY:   DS   2
+       CheckSum:   DS   2
+    dustDensity:   DS   2
+            dat:   DS   20
+         D_Temp:   DS   2
+           D_RH:   DS   2
+         I_Temp:   DS   2
+           I_RH:   DS   2
+ adc_value_GPMY:   DS   1
+
+	RSEG  ?CO?MAIN
+?SC_0:
+	DB  'E' ,'r' ,'r' ,'o' ,'r' ,000H
+
+?SC_6:
+	DB  'H' ,'u' ,'m' ,' ' ,'=' ,' ' ,'%' ,'d' ,'.' ,'%' 
+	DB  'd' ,000H
+
+; #include <reg51.h>
+; #include <stdio.h>
+; #include <string.h>
+; #include <stdlib.h>
+; #include "main.h"
+; #include "port.h"
+; #include "lcd.h"
+; #include "dht.h"
+; #include "delay.h"
+; #include "ADC0804.h"
+; #include "interrupt.h"
+; 
+; int I_RH,D_RH,I_Temp,D_Temp,CheckSum; 
+; unsigned char dat[20];
+; unsigned char adc_value_GPMY;
+; unsigned int voltage_GPMY;
+; unsigned int dustDensity;
+; 
+; void get_DHT11();
+; unsigned char get_MQ05();
+; float get_GPMY();
+; 
+; void main()
+
+	RSEG  ?PR?main?MAIN
+main:
+	USING	0
+			; SOURCE LINE # 23
+; {
+			; SOURCE LINE # 24
+; 	
+; 	LCD_Init();  
+			; SOURCE LINE # 26
+	LCALL	LCD_Init
+?C0001:
+; 	//INT_Init();
+; 	while(1)
+			; SOURCE LINE # 28
+; 	{  
+			; SOURCE LINE # 29
+; //		Uart_Write_Text(get_DHT11());
+; //		Uart_Write_Text(get_MQ05());
+; //		Uart_Write_Text(get_GPMY());
+; 		//delay_ms(1000);
+; 	} 
+			; SOURCE LINE # 34
+	SJMP 	?C0001
+; END OF main
+
+; }
+; 
+; void get_DHT11()
+
+	RSEG  ?PR?get_DHT11?MAIN
+get_DHT11:
+	USING	0
+			; SOURCE LINE # 37
+; {
+			; SOURCE LINE # 38
+; 	Request(); 
+			; SOURCE LINE # 39
+	LCALL	Request
+;   Response(); 
+			; SOURCE LINE # 40
+	LCALL	Response
+; 	
+;   I_RH=Receive_data(); 
+			; SOURCE LINE # 42
+	LCALL	Receive_data
+	MOV  	I_RH,R6
+	MOV  	I_RH+01H,R7
+;   D_RH=Receive_data(); 
+			; SOURCE LINE # 43
+	LCALL	Receive_data
+	MOV  	D_RH,R6
+	MOV  	D_RH+01H,R7
+;   I_Temp=Receive_data(); 
+			; SOURCE LINE # 44
+	LCALL	Receive_data
+	MOV  	I_Temp,R6
+	MOV  	I_Temp+01H,R7
+;   D_Temp=Receive_data(); 
+			; SOURCE LINE # 45
+	LCALL	Receive_data
+	MOV  	D_Temp,R6
+	MOV  	D_Temp+01H,R7
+;   CheckSum=Receive_data();
+			; SOURCE LINE # 46
+	LCALL	Receive_data
+	MOV  	CheckSum,R6
+	MOV  	CheckSum+01H,R7
+; 
+;   if ((I_RH + D_RH + I_Temp + D_Temp) != CheckSum)
+			; SOURCE LINE # 48
+	MOV  	A,I_RH+01H
+	ADD  	A,D_RH+01H
+	MOV  	R7,A
+	MOV  	A,I_RH
+	ADDC 	A,D_RH
+	MOV  	R6,A
+	MOV  	A,I_Temp+01H
+	ADD  	A,R7
+	MOV  	R7,A
+	MOV  	A,I_Temp
+	ADDC 	A,R6
+	MOV  	R6,A
+	MOV  	A,D_Temp+01H
+	ADD  	A,R7
+	MOV  	R7,A
+	MOV  	A,D_Temp
+	ADDC 	A,R6
+	MOV  	R6,A
+	MOV  	A,R7
+	XRL  	A,CheckSum+01H
+	JNZ  	?C0007
+	MOV  	A,R6
+	XRL  	A,CheckSum
+?C0007:
+	JZ   	?C0004
+;   {
+			; SOURCE LINE # 49
+;    LCD_String_xy(0,0,"Error");
+			; SOURCE LINE # 50
+	MOV  	R3,#0FFH
+	MOV  	R2,#HIGH (?SC_0)
+	MOV  	R1,#LOW (?SC_0)
+	CLR  	A
+	MOV  	R5,A
+	MOV  	R7,A
+	LCALL	_LCD_String_xy
+;   }
+			; SOURCE LINE # 51
+	SJMP 	?C0005
+?C0004:
+;   
+;   else
+;   {
+			; SOURCE LINE # 54
+;    sprintf(dat,"Hum = %d.%d",I_RH,D_RH);
+			; SOURCE LINE # 55
+	MOV  	?_sprintf?BYTE+03H,#0FFH
+	MOV  	?_sprintf?BYTE+04H,#HIGH (?SC_6)
+	MOV  	?_sprintf?BYTE+05H,#LOW (?SC_6)
+	MOV  	?_sprintf?BYTE+06H,I_RH
+	MOV  	?_sprintf?BYTE+07H,I_RH+01H
+	MOV  	?_sprintf?BYTE+08H,D_RH
+	MOV  	?_sprintf?BYTE+09H,D_RH+01H
+	MOV  	R3,#00H
+	MOV  	R2,#HIGH (dat)
+	MOV  	R1,#LOW (dat)
+	LCALL	_sprintf
+; //   LCD_String_xy(0,0,dat);
+; //   sprintf(dat,"Tem = %d.%d",I_Temp,D_Temp);   
+; //   LCD_String_xy(1,0,dat);
+; //   LCD_Char(0xDF);
+; //   LCD_String("C");
+; //   memset(dat,0,20);
+; //   sprintf(dat,"%d   ",CheckSum);
+; //   LCD_String_xy(1,13,dat);
+;   }  
+			; SOURCE LINE # 64
+?C0005:
+;   delay_ms(100);
+			; SOURCE LINE # 65
+	MOV  	R7,#064H
+	MOV  	R6,#00H
+	LJMP 	_delay_ms
+; END OF get_DHT11
+
+	END

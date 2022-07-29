@@ -1,0 +1,114 @@
+C51 COMPILER V9.60.0.0   LCD16X2_4BIT                                                      01/18/2022 21:09:14 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE LCD16X2_4BIT
+OBJECT MODULE PLACED IN .\Objects\LCD16x2_4bit.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE LCD16x2_4bit.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listi
+                    -ngs\LCD16x2_4bit.lst) TABS(2) OBJECT(.\Objects\LCD16x2_4bit.obj)
+
+line level    source
+
+   1          #include "LCD16x2_4bit.h"
+*** ERROR C132 IN LINE 7 OF LCD16x2_4bit.h: '_LCD_Char': not in formal parameter list
+*** ERROR C141 IN LINE 7 OF LCD16x2_4bit.h: syntax error near 'void', expected ';'
+*** ERROR C132 IN LINE 7 OF LCD16x2_4bit.h: '_LCD_String': not in formal parameter list
+*** ERROR C132 IN LINE 8 OF LCD16x2_4bit.h: '_LCD_String_xy': not in formal parameter list
+   2          
+   3          /*  
+   4             LCD16x2 4 bit 8051 interface
+   5             http://www.electronicwings.com
+   6          */
+   7          
+   8          
+   9          #include<reg51.h>
+*** ERROR C132 IN LINE 13 OF C:\Keil_v5\C51\Inc\reg51.h: 'LCD_Init': not in formal parameter list
+*** ERROR C141 IN LINE 13 OF C:\Keil_v5\C51\Inc\reg51.h: syntax error near 'sfr', expected ';'
+*** ERROR C136 IN LINE 13 OF C:\Keil_v5\C51\Inc\reg51.h: 'P0': 'void' on variable
+*** ERROR C244 IN LINE 13 OF C:\Keil_v5\C51\Inc\reg51.h: 'P0': can't initialize, bad type or class
+*** ERROR C136 IN LINE 13 OF C:\Keil_v5\C51\Inc\reg51.h: 'P0': 'void' on variable
+*** ERROR C132 IN LINE 13 OF C:\Keil_v5\C51\Inc\reg51.h: 'P0': not in formal parameter list
+*** ERROR C141 IN LINE 14 OF C:\Keil_v5\C51\Inc\reg51.h: syntax error near 'sfr', expected 'hdata'
+  10          
+  11          sfr LCD_Port=0x90;    /* P1 port as data port */
+  12          sbit rs=P1^0;     /* Register select pin */
+  13          sbit rw=P1^1;     /* Read/Write pin */
+  14          sbit en=P1^2;     /* Enable pin */
+  15          
+  16          
+  17          /* Function to provide delay Approx 1ms with 11.0592 Mhz crystal*/
+  18          void delay(unsigned int count)        
+  19          {
+  20   1           int i,j;
+  21   1           for(i=0;i<count;i++)
+  22   1           for(j=0;j<112;j++);
+  23   1      }
+  24          
+  25          void LCD_Command (char cmnd)  /* LCD16x2 command funtion */
+  26          {
+  27   1        LCD_Port =(LCD_Port & 0x0F) | (cmnd & 0xF0);/* Send upper nibble */
+  28   1        rs=0;     /* Command reg. */
+  29   1        rw=0;     /* Write operation */
+  30   1        en=1; 
+  31   1        delay(1);
+  32   1        en=0;
+  33   1        delay(2);
+  34   1        
+  35   1        LCD_Port = (LCD_Port & 0x0F) | (cmnd << 4);/* Send lower nibble */
+  36   1        en=1;     /* Enable pulse */
+  37   1        delay(1);
+  38   1        en=0;
+  39   1        delay(5);
+  40   1      }
+  41          
+  42          void LCD_Char (char char_data)  /* LCD data write function */
+  43          {
+C51 COMPILER V9.60.0.0   LCD16X2_4BIT                                                      01/18/2022 21:09:14 PAGE 2   
+
+  44   1        LCD_Port =(LCD_Port & 0x0F) | (char_data & 0xF0);/* Send upper nibble */
+  45   1        rs=1;       /*Data reg.*/
+  46   1        rw=0;       /*Write operation*/
+  47   1        en=1;  
+  48   1        delay(1);
+  49   1        en=0;
+  50   1        delay(2);
+  51   1      
+  52   1        LCD_Port = (LCD_Port & 0x0F) | (char_data << 4);/* Send lower nibble */
+  53   1        en=1;       /* Enable pulse */
+  54   1        delay(1);
+  55   1        en=0;
+  56   1        delay(5);
+  57   1      
+  58   1      }
+  59          
+  60          void LCD_String (char *str) /* Send string to LCD function */
+  61          {
+  62   1        int i;
+  63   1        for(i=0;str[i]!=0;i++)  /* Send each char of string till the NULL */
+  64   1        {
+  65   2          LCD_Char (str[i]);  /* Call LCD data write */
+  66   2        }
+  67   1      }
+  68          
+  69          void LCD_String_xy (char row, char pos, char *str)  /* Send string to LCD function */
+  70          {
+  71   1        if (row == 0)
+  72   1        LCD_Command((pos & 0x0F)|0x80);
+  73   1        else if (row == 1)
+  74   1        LCD_Command((pos & 0x0F)|0xC0);
+  75   1        LCD_String(str);    /* Call LCD string function */
+  76   1      }
+  77          
+  78          void LCD_Init (void)    /* LCD Initialize function */
+  79          {
+  80   1        delay(20);    /* LCD Power ON Initialization time >15ms */
+  81   1        LCD_Command (0x02); /* 4bit mode */
+  82   1        LCD_Command (0x28); /* Initialization of 16X2 LCD in 4bit mode */
+  83   1        LCD_Command (0x0C); /* Display ON Cursor OFF */
+  84   1        LCD_Command (0x06); /* Auto Increment cursor */
+  85   1        LCD_Command (0x01); /* clear display */
+  86   1        LCD_Command (0x80); /* cursor at home position */
+  87   1      }
+  88          
+  89           
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  11 ERROR(S)

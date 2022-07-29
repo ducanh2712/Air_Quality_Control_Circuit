@@ -1,0 +1,463 @@
+A51 MACRO ASSEMBLER  LCD                                                                  03/18/2022 16:37:05 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\lcd.OBJ
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE .\Objects\lcd.src PR(.\Listings\lcd.ls1) EP DEBUG
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     ; .\Objects\lcd.SRC generated from: lcd.c
+                       2     ; COMPILER INVOKED BY:
+                       3     ;        C:\Keil_v5\C51\BIN\C51.EXE lcd.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT
+                             (.\Listings\lcd.lst) TABS(2) SRC(.\Objects\lcd.SRC)
+                       4     
+                       5     $nomod51 
+                       6     
+                       7     NAME    LCD
+                       8     
+  0080                 9     P0      DATA    080H
+  0090                10     P1      DATA    090H
+  00A0                11     P2      DATA    0A0H
+  00B0                12     P3      DATA    0B0H
+  00B5                13     MQ05    BIT     0B0H.5
+  00B4                14     T0      BIT     0B0H.4
+  00D6                15     AC      BIT     0D0H.6
+  00B5                16     T1      BIT     0B0H.5
+  00AF                17     EA      BIT     0A8H.7
+  00B7                18     LED_LCD BIT     0B0H.7
+  0094                19     ADC0804_RD      BIT     090H.4
+  0093                20     ADC0804_CS      BIT     090H.3
+  00A8                21     IE      DATA    0A8H
+  0090                22     EN      BIT     090H.0
+  00B7                23     RD      BIT     0B0H.7
+  00AC                24     ES      BIT     0A8H.4
+  00B8                25     IP      DATA    0B8H
+  0098                26     RI      BIT     098H.0
+  00B2                27     INT0    BIT     0B0H.2
+  00D7                28     CY      BIT     0D0H.7
+  0099                29     TI      BIT     098H.1
+  00B3                30     INT1    BIT     0B0H.3
+  00B3                31     INT_LCD BIT     0B0H.3
+  0095                32     ADC0804_WR      BIT     090H.5
+  00BC                33     PS      BIT     0B8H.4
+  0081                34     SP      DATA    081H
+  0092                35     RS      BIT     090H.2
+  00D2                36     OV      BIT     0D0H.2
+  0091                37     RW      BIT     090H.1
+  00B6                38     WR      BIT     0B0H.6
+  0099                39     SBUF    DATA    099H
+  0087                40     PCON    DATA    087H
+  0098                41     SCON    DATA    098H
+  00B3                42     ADC0804_INTR    BIT     0B0H.3
+  0089                43     TMOD    DATA    089H
+  0088                44     TCON    DATA    088H
+  0089                45     IE0     BIT     088H.1
+  008B                46     IE1     BIT     088H.3
+  00F0                47     B       DATA    0F0H
+  00B4                48     DHT11   BIT     0B0H.4
+  00E0                49     ACC     DATA    0E0H
+  00B0                50     UART_RX BIT     0B0H.0
+  00A9                51     ET0     BIT     0A8H.1
+  00B1                52     UART_TX BIT     0B0H.1
+  00AB                53     ET1     BIT     0A8H.3
+  008D                54     TF0     BIT     088H.5
+  008F                55     TF1     BIT     088H.7
+  009A                56     RB8     BIT     098H.2
+  008C                57     TH0     DATA    08CH
+A51 MACRO ASSEMBLER  LCD                                                                  03/18/2022 16:37:05 PAGE     2
+
+  00A8                58     EX0     BIT     0A8H.0
+  0088                59     IT0     BIT     088H.0
+  008D                60     TH1     DATA    08DH
+  009B                61     TB8     BIT     098H.3
+  00AA                62     EX1     BIT     0A8H.2
+  008A                63     IT1     BIT     088H.2
+  00D0                64     P       BIT     0D0H.0
+  009F                65     SM0     BIT     098H.7
+  008A                66     TL0     DATA    08AH
+  009E                67     SM1     BIT     098H.6
+  008B                68     TL1     DATA    08BH
+  009D                69     SM2     BIT     098H.5
+  00B9                70     PT0     BIT     0B8H.1
+  00BB                71     PT1     BIT     0B8H.3
+  00D3                72     RS0     BIT     0D0H.3
+  008C                73     TR0     BIT     088H.4
+  00D4                74     RS1     BIT     0D0H.4
+  008E                75     TR1     BIT     088H.6
+  00B8                76     PX0     BIT     0B8H.0
+  00BA                77     PX1     BIT     0B8H.2
+  0083                78     DPH     DATA    083H
+  0082                79     DPL     DATA    082H
+  009C                80     REN     BIT     098H.4
+  00B0                81     RXD     BIT     0B0H.0
+  00B1                82     TXD     BIT     0B0H.1
+  00B6                83     LED_GPMY        BIT     0B0H.6
+  00D5                84     F0      BIT     0D0H.5
+  00D0                85     PSW     DATA    0D0H
+                      86     ?PR?_LCD_Command?LCD SEGMENT CODE 
+                      87     ?PR?_LCD_Char?LCD    SEGMENT CODE 
+                      88     ?PR?_LCD_String?LCD  SEGMENT CODE 
+                      89     ?DT?_LCD_String?LCD  SEGMENT DATA OVERLAYABLE 
+                      90     ?PR?_LCD_String_xy?LCD                   SEGMENT CODE 
+                      91     ?DT?_LCD_String_xy?LCD                   SEGMENT DATA OVERLAYABLE 
+                      92     ?PR?LCD_Init?LCD     SEGMENT CODE 
+                      93             EXTRN   CODE (_delay_ms)
+                      94             EXTRN   CODE (?C?CLDOPTR)
+                      95             PUBLIC  LCD_Init
+                      96             PUBLIC  _LCD_String_xy
+                      97             PUBLIC  _LCD_String
+                      98             PUBLIC  _LCD_Char
+                      99             PUBLIC  _LCD_Command
+                     100     
+----                 101             RSEG  ?DT?_LCD_String_xy?LCD
+0000                 102     ?_LCD_String_xy?BYTE:
+0000                 103             str?346:   DS   3
+                     104     
+----                 105             RSEG  ?DT?_LCD_String?LCD
+0000                 106     ?_LCD_String?BYTE:
+0000                 107             str?242:   DS   3
+0003                 108             ORG  3
+0003                 109               i?243:   DS   2
+                     110     ; #include <reg51.h>
+                     111     ; #include "lcd.h"
+                     112     ; #include "port.h"
+                     113     ; #include "delay.h"
+                     114     ; 
+                     115     ; 
+                     116     ; void LCD_Command (unsigned char cmd) 
+                     117     
+----                 118             RSEG  ?PR?_LCD_Command?LCD
+0000                 119     _LCD_Command:
+                     120             USING   0
+                     121                             ; SOURCE LINE # 7
+                     122     ;---- Variable 'cmd?040' assigned to Register 'R7' ----
+                     123     ; {
+A51 MACRO ASSEMBLER  LCD                                                                  03/18/2022 16:37:05 PAGE     3
+
+                     124                             ; SOURCE LINE # 8
+                     125     ;       LCD_DATA = cmd;
+                     126                             ; SOURCE LINE # 9
+0000 8F80            127             MOV     P0,R7
+                     128     ;       RS=0;           
+                     129                             ; SOURCE LINE # 10
+0002 C292            130             CLR     RS
+                     131     ;       RW=0;           
+                     132                             ; SOURCE LINE # 11
+0004 C291            133             CLR     RW
+                     134     ;       EN=1; 
+                     135                             ; SOURCE LINE # 12
+0006 D290            136             SETB    EN
+                     137     ;       delay_ms(1);
+                     138                             ; SOURCE LINE # 13
+0008 7F01            139             MOV     R7,#01H
+000A 7E00            140             MOV     R6,#00H
+000C 120000   F      141             LCALL   _delay_ms
+                     142     ;       EN=0;
+                     143                             ; SOURCE LINE # 14
+000F C290            144             CLR     EN
+                     145     ;       delay_ms(5);
+                     146                             ; SOURCE LINE # 15
+0011 7F05            147             MOV     R7,#05H
+0013 7E00            148             MOV     R6,#00H
+0015 020000   F      149             LJMP    _delay_ms
+                     150     ; END OF _LCD_Command
+                     151     
+                     152     ; }
+                     153     ; 
+                     154     ; void LCD_Char (unsigned char char_data) 
+                     155     
+----                 156             RSEG  ?PR?_LCD_Char?LCD
+0000                 157     _LCD_Char:
+                     158             USING   0
+                     159                             ; SOURCE LINE # 18
+                     160     ;---- Variable 'char_data?141' assigned to Register 'R7' ----
+                     161     ; {
+                     162                             ; SOURCE LINE # 19
+                     163     ;       LCD_DATA=char_data;
+                     164                             ; SOURCE LINE # 20
+0000 8F80            165             MOV     P0,R7
+                     166     ;       RS=1;           
+                     167                             ; SOURCE LINE # 21
+0002 D292            168             SETB    RS
+                     169     ;       RW=0;   
+                     170                             ; SOURCE LINE # 22
+0004 C291            171             CLR     RW
+                     172     ;       EN=1;                                   
+                     173                             ; SOURCE LINE # 23
+0006 D290            174             SETB    EN
+                     175     ;       delay_ms(1);
+                     176                             ; SOURCE LINE # 24
+0008 7F01            177             MOV     R7,#01H
+000A 7E00            178             MOV     R6,#00H
+000C 120000   F      179             LCALL   _delay_ms
+                     180     ;       EN=0;
+                     181                             ; SOURCE LINE # 25
+000F C290            182             CLR     EN
+                     183     ;       delay_ms(5);
+                     184                             ; SOURCE LINE # 26
+0011 7F05            185             MOV     R7,#05H
+0013 7E00            186             MOV     R6,#00H
+0015 020000   F      187             LJMP    _delay_ms
+                     188     ; END OF _LCD_Char
+                     189     
+A51 MACRO ASSEMBLER  LCD                                                                  03/18/2022 16:37:05 PAGE     4
+
+                     190     ; }
+                     191     ; 
+                     192     ; void LCD_String (unsigned char *str)
+                     193     
+----                 194             RSEG  ?PR?_LCD_String?LCD
+0000                 195     _LCD_String:
+                     196             USING   0
+                     197                             ; SOURCE LINE # 29
+0000 8B00     F      198             MOV     str?242,R3
+0002 8A00     F      199             MOV     str?242+01H,R2
+0004 8900     F      200             MOV     str?242+02H,R1
+                     201     ; {
+                     202                             ; SOURCE LINE # 30
+                     203     ;       int i;
+                     204     ;       for(i=0;str[i]!=0;i++)
+                     205                             ; SOURCE LINE # 32
+0006 E4              206             CLR     A
+0007 F500     F      207             MOV     i?243,A
+0009 F500     F      208             MOV     i?243+01H,A
+000B                 209     ?C0003:
+000B AB00     F      210             MOV     R3,str?242
+000D AA00     F      211             MOV     R2,str?242+01H
+000F A900     F      212             MOV     R1,str?242+02H
+0011 850082   F      213             MOV     DPL,i?243+01H
+0014 850083   F      214             MOV     DPH,i?243
+0017 120000   F      215             LCALL   ?C?CLDOPTR
+001A FF              216             MOV     R7,A
+001B 600D            217             JZ      ?C0006
+                     218     ;       {
+                     219                             ; SOURCE LINE # 33
+                     220     ;               LCD_Char (str[i]);  
+                     221                             ; SOURCE LINE # 34
+001D 120000   F      222             LCALL   _LCD_Char
+                     223     ;       }
+                     224                             ; SOURCE LINE # 35
+0020 0500     F      225             INC     i?243+01H
+0022 E500     F      226             MOV     A,i?243+01H
+0024 70E5            227             JNZ     ?C0003
+0026 0500     F      228             INC     i?243
+0028                 229     ?C0011:
+0028 80E1            230             SJMP    ?C0003
+                     231     ; }
+                     232                             ; SOURCE LINE # 36
+002A                 233     ?C0006:
+002A 22              234             RET     
+                     235     ; END OF _LCD_String
+                     236     
+                     237     ; 
+                     238     ; void LCD_String_xy (char row, char pos, char *str) 
+                     239     
+----                 240             RSEG  ?PR?_LCD_String_xy?LCD
+0000                 241     _LCD_String_xy:
+                     242             USING   0
+                     243                             ; SOURCE LINE # 38
+0000 8B00     F      244             MOV     str?346,R3
+0002 8A00     F      245             MOV     str?346+01H,R2
+0004 8900     F      246             MOV     str?346+02H,R1
+                     247     ;---- Variable 'pos?345' assigned to Register 'R5' ----
+                     248     ;---- Variable 'row?344' assigned to Register 'R7' ----
+                     249     ; {
+                     250                             ; SOURCE LINE # 39
+                     251     ;       unsigned char cmd;
+                     252     ;       cmd = (row==1?0x80:0xC0) + pos - 1;
+                     253                             ; SOURCE LINE # 41
+0006 EF              254             MOV     A,R7
+0007 33              255             RLC     A
+A51 MACRO ASSEMBLER  LCD                                                                  03/18/2022 16:37:05 PAGE     5
+
+0008 95E0            256             SUBB    A,ACC
+000A FE              257             MOV     R6,A
+000B EF              258             MOV     A,R7
+000C 6401            259             XRL     A,#01H
+000E 4E              260             ORL     A,R6
+000F 7004            261             JNZ     ?C0007
+0011 7F80            262             MOV     R7,#080H
+0013 8002            263             SJMP    ?C0008
+0015                 264     ?C0007:
+0015 7FC0            265             MOV     R7,#0C0H
+0017                 266     ?C0008:
+0017 EF              267             MOV     A,R7
+0018 2D              268             ADD     A,R5
+0019 14              269             DEC     A
+001A FF              270             MOV     R7,A
+                     271     ;---- Variable 'cmd?347' assigned to Register 'R7' ----
+                     272     ;       LCD_Command(cmd);
+                     273                             ; SOURCE LINE # 42
+001B 120000   F      274             LCALL   _LCD_Command
+                     275     ;       LCD_String(str);
+                     276                             ; SOURCE LINE # 43
+001E AB00     F      277             MOV     R3,str?346
+0020 AA00     F      278             MOV     R2,str?346+01H
+0022 A900     F      279             MOV     R1,str?346+02H
+0024 020000   F      280             LJMP    _LCD_String
+                     281     ; END OF _LCD_String_xy
+                     282     
+                     283     ; }
+                     284     ; 
+                     285     ; void LCD_Init ()      
+                     286     
+----                 287             RSEG  ?PR?LCD_Init?LCD
+0000                 288     LCD_Init:
+                     289             USING   0
+                     290                             ; SOURCE LINE # 46
+                     291     ; {     
+                     292                             ; SOURCE LINE # 47
+                     293     ;       LCD_Command(0x30);
+                     294                             ; SOURCE LINE # 48
+0000 7F30            295             MOV     R7,#030H
+0002 120000   F      296             LCALL   _LCD_Command
+                     297     ;       delay_ms(5);            
+                     298                             ; SOURCE LINE # 49
+0005 7F05            299             MOV     R7,#05H
+0007 7E00            300             MOV     R6,#00H
+0009 120000   F      301             LCALL   _delay_ms
+                     302     ;       LCD_Command(0x30);
+                     303                             ; SOURCE LINE # 50
+000C 7F30            304             MOV     R7,#030H
+000E 120000   F      305             LCALL   _LCD_Command
+                     306     ;       delay_ms(1);    
+                     307                             ; SOURCE LINE # 51
+0011 7F01            308             MOV     R7,#01H
+0013 7E00            309             MOV     R6,#00H
+0015 120000   F      310             LCALL   _delay_ms
+                     311     ;       LCD_Command(0x38);
+                     312                             ; SOURCE LINE # 52
+0018 7F38            313             MOV     R7,#038H
+001A 120000   F      314             LCALL   _LCD_Command
+                     315     ;       LCD_Command(0x01);
+                     316                             ; SOURCE LINE # 53
+001D 7F01            317             MOV     R7,#01H
+001F 120000   F      318             LCALL   _LCD_Command
+                     319     ;       LCD_Command(0x0C);
+                     320                             ; SOURCE LINE # 54
+0022 7F0C            321             MOV     R7,#0CH
+A51 MACRO ASSEMBLER  LCD                                                                  03/18/2022 16:37:05 PAGE     6
+
+0024 020000   F      322             LJMP    _LCD_Command
+                     323     ; END OF LCD_Init
+                     324     
+                     325             END
+A51 MACRO ASSEMBLER  LCD                                                                  03/18/2022 16:37:05 PAGE     7
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E                 T Y P E  V A L U E   ATTRIBUTES
+
+?C0003 . . . . . . . .  C ADDR   000BH   R   SEG=?PR?_LCD_STRING?LCD
+?C0006 . . . . . . . .  C ADDR   002AH   R   SEG=?PR?_LCD_STRING?LCD
+?C0007 . . . . . . . .  C ADDR   0015H   R   SEG=?PR?_LCD_STRING_XY?LCD
+?C0008 . . . . . . . .  C ADDR   0017H   R   SEG=?PR?_LCD_STRING_XY?LCD
+?C0011 . . . . . . . .  C ADDR   0028H   R   SEG=?PR?_LCD_STRING?LCD
+?C?CLDOPTR . . . . . .  C ADDR   -----       EXT
+?DT?_LCD_STRING?LCD. .  D SEG    0005H       REL=UNIT
+?DT?_LCD_STRING_XY?LCD  D SEG    0003H       REL=UNIT
+?PR?LCD_INIT?LCD . . .  C SEG    0027H       REL=UNIT
+?PR?_LCD_CHAR?LCD. . .  C SEG    0018H       REL=UNIT
+?PR?_LCD_COMMAND?LCD .  C SEG    0018H       REL=UNIT
+?PR?_LCD_STRING?LCD. .  C SEG    002BH       REL=UNIT
+?PR?_LCD_STRING_XY?LCD  C SEG    0027H       REL=UNIT
+?_LCD_STRING?BYTE. . .  D ADDR   0000H   R   SEG=?DT?_LCD_STRING?LCD
+?_LCD_STRING_XY?BYTE .  D ADDR   0000H   R   SEG=?DT?_LCD_STRING_XY?LCD
+AC . . . . . . . . . .  B ADDR   00D0H.6 A   
+ACC. . . . . . . . . .  D ADDR   00E0H   A   
+ADC0804_CS . . . . . .  B ADDR   0090H.3 A   
+ADC0804_INTR . . . . .  B ADDR   00B0H.3 A   
+ADC0804_RD . . . . . .  B ADDR   0090H.4 A   
+ADC0804_WR . . . . . .  B ADDR   0090H.5 A   
+B. . . . . . . . . . .  D ADDR   00F0H   A   
+CY . . . . . . . . . .  B ADDR   00D0H.7 A   
+DHT11. . . . . . . . .  B ADDR   00B0H.4 A   
+DPH. . . . . . . . . .  D ADDR   0083H   A   
+DPL. . . . . . . . . .  D ADDR   0082H   A   
+EA . . . . . . . . . .  B ADDR   00A8H.7 A   
+EN . . . . . . . . . .  B ADDR   0090H.0 A   
+ES . . . . . . . . . .  B ADDR   00A8H.4 A   
+ET0. . . . . . . . . .  B ADDR   00A8H.1 A   
+ET1. . . . . . . . . .  B ADDR   00A8H.3 A   
+EX0. . . . . . . . . .  B ADDR   00A8H.0 A   
+EX1. . . . . . . . . .  B ADDR   00A8H.2 A   
+F0 . . . . . . . . . .  B ADDR   00D0H.5 A   
+I?243. . . . . . . . .  D ADDR   0003H   R   SEG=?DT?_LCD_STRING?LCD
+IE . . . . . . . . . .  D ADDR   00A8H   A   
+IE0. . . . . . . . . .  B ADDR   0088H.1 A   
+IE1. . . . . . . . . .  B ADDR   0088H.3 A   
+INT0 . . . . . . . . .  B ADDR   00B0H.2 A   
+INT1 . . . . . . . . .  B ADDR   00B0H.3 A   
+INT_LCD. . . . . . . .  B ADDR   00B0H.3 A   
+IP . . . . . . . . . .  D ADDR   00B8H   A   
+IT0. . . . . . . . . .  B ADDR   0088H.0 A   
+IT1. . . . . . . . . .  B ADDR   0088H.2 A   
+LCD. . . . . . . . . .  N NUMB   -----       
+LCD_INIT . . . . . . .  C ADDR   0000H   R   SEG=?PR?LCD_INIT?LCD
+LED_GPMY . . . . . . .  B ADDR   00B0H.6 A   
+LED_LCD. . . . . . . .  B ADDR   00B0H.7 A   
+MQ05 . . . . . . . . .  B ADDR   00B0H.5 A   
+OV . . . . . . . . . .  B ADDR   00D0H.2 A   
+P. . . . . . . . . . .  B ADDR   00D0H.0 A   
+P0 . . . . . . . . . .  D ADDR   0080H   A   
+P1 . . . . . . . . . .  D ADDR   0090H   A   
+P2 . . . . . . . . . .  D ADDR   00A0H   A   
+P3 . . . . . . . . . .  D ADDR   00B0H   A   
+PCON . . . . . . . . .  D ADDR   0087H   A   
+PS . . . . . . . . . .  B ADDR   00B8H.4 A   
+PSW. . . . . . . . . .  D ADDR   00D0H   A   
+PT0. . . . . . . . . .  B ADDR   00B8H.1 A   
+PT1. . . . . . . . . .  B ADDR   00B8H.3 A   
+A51 MACRO ASSEMBLER  LCD                                                                  03/18/2022 16:37:05 PAGE     8
+
+PX0. . . . . . . . . .  B ADDR   00B8H.0 A   
+PX1. . . . . . . . . .  B ADDR   00B8H.2 A   
+RB8. . . . . . . . . .  B ADDR   0098H.2 A   
+RD . . . . . . . . . .  B ADDR   00B0H.7 A   
+REN. . . . . . . . . .  B ADDR   0098H.4 A   
+RI . . . . . . . . . .  B ADDR   0098H.0 A   
+RS . . . . . . . . . .  B ADDR   0090H.2 A   
+RS0. . . . . . . . . .  B ADDR   00D0H.3 A   
+RS1. . . . . . . . . .  B ADDR   00D0H.4 A   
+RW . . . . . . . . . .  B ADDR   0090H.1 A   
+RXD. . . . . . . . . .  B ADDR   00B0H.0 A   
+SBUF . . . . . . . . .  D ADDR   0099H   A   
+SCON . . . . . . . . .  D ADDR   0098H   A   
+SM0. . . . . . . . . .  B ADDR   0098H.7 A   
+SM1. . . . . . . . . .  B ADDR   0098H.6 A   
+SM2. . . . . . . . . .  B ADDR   0098H.5 A   
+SP . . . . . . . . . .  D ADDR   0081H   A   
+STR?242. . . . . . . .  D ADDR   0000H   R   SEG=?DT?_LCD_STRING?LCD
+STR?346. . . . . . . .  D ADDR   0000H   R   SEG=?DT?_LCD_STRING_XY?LCD
+T0 . . . . . . . . . .  B ADDR   00B0H.4 A   
+T1 . . . . . . . . . .  B ADDR   00B0H.5 A   
+TB8. . . . . . . . . .  B ADDR   0098H.3 A   
+TCON . . . . . . . . .  D ADDR   0088H   A   
+TF0. . . . . . . . . .  B ADDR   0088H.5 A   
+TF1. . . . . . . . . .  B ADDR   0088H.7 A   
+TH0. . . . . . . . . .  D ADDR   008CH   A   
+TH1. . . . . . . . . .  D ADDR   008DH   A   
+TI . . . . . . . . . .  B ADDR   0098H.1 A   
+TL0. . . . . . . . . .  D ADDR   008AH   A   
+TL1. . . . . . . . . .  D ADDR   008BH   A   
+TMOD . . . . . . . . .  D ADDR   0089H   A   
+TR0. . . . . . . . . .  B ADDR   0088H.4 A   
+TR1. . . . . . . . . .  B ADDR   0088H.6 A   
+TXD. . . . . . . . . .  B ADDR   00B0H.1 A   
+UART_RX. . . . . . . .  B ADDR   00B0H.0 A   
+UART_TX. . . . . . . .  B ADDR   00B0H.1 A   
+WR . . . . . . . . . .  B ADDR   00B0H.6 A   
+_DELAY_MS. . . . . . .  C ADDR   -----       EXT
+_LCD_CHAR. . . . . . .  C ADDR   0000H   R   SEG=?PR?_LCD_CHAR?LCD
+_LCD_COMMAND . . . . .  C ADDR   0000H   R   SEG=?PR?_LCD_COMMAND?LCD
+_LCD_STRING. . . . . .  C ADDR   0000H   R   SEG=?PR?_LCD_STRING?LCD
+_LCD_STRING_XY . . . .  C ADDR   0000H   R   SEG=?PR?_LCD_STRING_XY?LCD
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

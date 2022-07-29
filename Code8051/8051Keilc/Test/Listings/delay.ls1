@@ -1,0 +1,467 @@
+A51 MACRO ASSEMBLER  DELAY                                                                03/18/2022 16:37:06 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\delay.OBJ
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE .\Objects\delay.src PR(.\Listings\delay.ls1) EP DEBUG
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     ; .\Objects\delay.SRC generated from: delay.c
+                       2     ; COMPILER INVOKED BY:
+                       3     ;        C:\Keil_v5\C51\BIN\C51.EXE delay.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRI
+                             NT(.\Listings\delay.lst) TABS(2) SRC(.\Objects\delay.SRC)
+                       4     
+                       5     $nomod51 
+                       6     
+                       7     NAME    DELAY
+                       8     
+  0080                 9     P0      DATA    080H
+  0090                10     P1      DATA    090H
+  00A0                11     P2      DATA    0A0H
+  00B0                12     P3      DATA    0B0H
+  00B4                13     T0      BIT     0B0H.4
+  00D6                14     AC      BIT     0D0H.6
+  00B5                15     T1      BIT     0B0H.5
+  00AF                16     EA      BIT     0A8H.7
+  00A8                17     IE      DATA    0A8H
+  00B7                18     RD      BIT     0B0H.7
+  00AC                19     ES      BIT     0A8H.4
+  00B8                20     IP      DATA    0B8H
+  0098                21     RI      BIT     098H.0
+  00B2                22     INT0    BIT     0B0H.2
+  00D7                23     CY      BIT     0D0H.7
+  0099                24     TI      BIT     098H.1
+  00B3                25     INT1    BIT     0B0H.3
+  00BC                26     PS      BIT     0B8H.4
+  0081                27     SP      DATA    081H
+  00D2                28     OV      BIT     0D0H.2
+  00B6                29     WR      BIT     0B0H.6
+  0099                30     SBUF    DATA    099H
+  0087                31     PCON    DATA    087H
+  0098                32     SCON    DATA    098H
+  0089                33     TMOD    DATA    089H
+  0088                34     TCON    DATA    088H
+  0089                35     IE0     BIT     088H.1
+  008B                36     IE1     BIT     088H.3
+  00F0                37     B       DATA    0F0H
+  00E0                38     ACC     DATA    0E0H
+  00A9                39     ET0     BIT     0A8H.1
+  00AB                40     ET1     BIT     0A8H.3
+  008D                41     TF0     BIT     088H.5
+  008F                42     TF1     BIT     088H.7
+  009A                43     RB8     BIT     098H.2
+  008C                44     TH0     DATA    08CH
+  00A8                45     EX0     BIT     0A8H.0
+  0088                46     IT0     BIT     088H.0
+  008D                47     TH1     DATA    08DH
+  009B                48     TB8     BIT     098H.3
+  00AA                49     EX1     BIT     0A8H.2
+  008A                50     IT1     BIT     088H.2
+  00D0                51     P       BIT     0D0H.0
+  009F                52     SM0     BIT     098H.7
+  008A                53     TL0     DATA    08AH
+  009E                54     SM1     BIT     098H.6
+  008B                55     TL1     DATA    08BH
+  009D                56     SM2     BIT     098H.5
+  00B9                57     PT0     BIT     0B8H.1
+A51 MACRO ASSEMBLER  DELAY                                                                03/18/2022 16:37:06 PAGE     2
+
+  00BB                58     PT1     BIT     0B8H.3
+  00D3                59     RS0     BIT     0D0H.3
+  008C                60     TR0     BIT     088H.4
+  00D4                61     RS1     BIT     0D0H.4
+  008E                62     TR1     BIT     088H.6
+  00B8                63     PX0     BIT     0B8H.0
+  00BA                64     PX1     BIT     0B8H.2
+  0083                65     DPH     DATA    083H
+  0082                66     DPL     DATA    082H
+  009C                67     REN     BIT     098H.4
+  00B0                68     RXD     BIT     0B0H.0
+  00B1                69     TXD     BIT     0B0H.1
+  00D5                70     F0      BIT     0D0H.5
+  00D0                71     PSW     DATA    0D0H
+                      72     ?PR?_delay_ms?DELAY  SEGMENT CODE 
+                      73     ?DT?_delay_ms?DELAY  SEGMENT DATA OVERLAYABLE 
+                      74     ?PR?timer_delay01us?DELAY                SEGMENT CODE 
+                      75     ?PR?timer_delay20ms?DELAY                SEGMENT CODE 
+                      76     ?PR?timer_delay30us?DELAY                SEGMENT CODE 
+                      77     ?PR?timer_delay280us?DELAY               SEGMENT CODE 
+                      78     ?PR?timer_delay40us?DELAY                SEGMENT CODE 
+                      79     ?PR?timer_delay9680us?DELAY              SEGMENT CODE 
+                      80             PUBLIC  timer_delay9680us
+                      81             PUBLIC  timer_delay40us
+                      82             PUBLIC  timer_delay280us
+                      83             PUBLIC  timer_delay30us
+                      84             PUBLIC  timer_delay20ms
+                      85             PUBLIC  timer_delay01us
+                      86             PUBLIC  _delay_ms
+                      87     
+----                  88             RSEG  ?DT?_delay_ms?DELAY
+0000                  89     ?_delay_ms?BYTE:
+0000                  90           count?040:   DS   2
+0002                  91             ORG  2
+0002                  92               i?041:   DS   2
+                      93     ; #include <reg51.h>
+                      94     ; #include "delay.h"
+                      95     ; 
+                      96     ; 
+                      97     ; 
+                      98     ; void delay_ms(unsigned int count)  /* Function to provide delay Approx 1ms */
+                      99     
+----                 100             RSEG  ?PR?_delay_ms?DELAY
+0000                 101     _delay_ms:
+                     102             USING   0
+                     103                             ; SOURCE LINE # 6
+0000 8E00     F      104             MOV     count?040,R6
+0002 8F00     F      105             MOV     count?040+01H,R7
+                     106     ; {
+                     107                             ; SOURCE LINE # 7
+                     108     ;       int i;
+                     109     ;       for(i=0;i<count;i++)
+                     110                             ; SOURCE LINE # 9
+0004 E4              111             CLR     A
+0005 F500     F      112             MOV     i?041,A
+0007 F500     F      113             MOV     i?041+01H,A
+0009                 114     ?C0001:
+0009 C3              115             CLR     C
+000A E500     F      116             MOV     A,i?041+01H
+000C 9500     F      117             SUBB    A,count?040+01H
+000E E500     F      118             MOV     A,i?041
+0010 9500     F      119             SUBB    A,count?040
+0012 500D            120             JNC     ?C0004
+                     121     ;       {
+                     122                             ; SOURCE LINE # 10
+                     123     ;               timer_delay01us();
+A51 MACRO ASSEMBLER  DELAY                                                                03/18/2022 16:37:06 PAGE     3
+
+                     124                             ; SOURCE LINE # 11
+0014 120000   F      125             LCALL   timer_delay01us
+                     126     ;       }
+                     127                             ; SOURCE LINE # 12
+0017 0500     F      128             INC     i?041+01H
+0019 E500     F      129             MOV     A,i?041+01H
+001B 70EC            130             JNZ     ?C0001
+001D 0500     F      131             INC     i?041
+001F                 132     ?C0011:
+001F 80E8            133             SJMP    ?C0001
+                     134     ; }
+                     135                             ; SOURCE LINE # 13
+0021                 136     ?C0004:
+0021 22              137             RET     
+                     138     ; END OF _delay_ms
+                     139     
+                     140     ; 
+                     141     ; void timer_delay01us()  /* Timer0 delay function */
+                     142     
+----                 143             RSEG  ?PR?timer_delay01us?DELAY
+0000                 144     timer_delay01us:
+                     145             USING   0
+                     146                             ; SOURCE LINE # 15
+                     147     ; {
+                     148                             ; SOURCE LINE # 16
+                     149     ; 
+                     150     ;  //TMOD = 0x01;
+                     151     ;  //TH0 = 0xB8;  /* Load higher 8-bit in TH0 */
+                     152     ;  //TL0 = 0x0C;  /* Load lower 8-bit in TL0 */
+                     153     ;  //TR0 = 1;  /* Start timer0 */
+                     154     ;  //while(TF0 == 0); /* Wait until timer0 flag set */
+                     155     ;  //TR0 = 0;  /* Stop timer0 */
+                     156     ;  //TF0 = 0;  /* Clear timer0 flag */
+                     157     ;       
+                     158     ;       #pragma asm
+                     159     ;       MOV TMOD, #21H
+0000 758921          160               MOV TMOD, #21H
+                     161     ;       MOV TH0, #0FCH
+0003 758CFC          162               MOV TH0, #0FCH
+                     163     ;       MOV TL0, #018H
+0006 758A18          164               MOV TL0, #018H
+                     165     ;       SETB TR0
+0009 D28C            166               SETB TR0
+                     167     ;       JNB TF0, $
+000B 308DFD          168               JNB TF0, $
+                     169     ;       CLR TR0
+000E C28C            170               CLR TR0
+                     171     ;       CLR TF0
+0010 C28D            172               CLR TF0
+                     173     ;       #pragma endasm
+                     174     ; }
+                     175                             ; SOURCE LINE # 35
+0012 22              176             RET     
+                     177     ; END OF timer_delay01us
+                     178     
+                     179     ; 
+                     180     ; void timer_delay20ms()  /* Timer0 delay function */
+                     181     
+----                 182             RSEG  ?PR?timer_delay20ms?DELAY
+0000                 183     timer_delay20ms:
+                     184             USING   0
+                     185                             ; SOURCE LINE # 37
+                     186     ; {
+                     187                             ; SOURCE LINE # 38
+                     188     ; 
+                     189     ;  //TMOD = 0x01;
+A51 MACRO ASSEMBLER  DELAY                                                                03/18/2022 16:37:06 PAGE     4
+
+                     190     ;  //TH0 = 0xB8;  /* Load higher 8-bit in TH0 */
+                     191     ;  //TL0 = 0x0C;  /* Load lower 8-bit in TL0 */
+                     192     ;  //TR0 = 1;  /* Start timer0 */
+                     193     ;  //while(TF0 == 0); /* Wait until timer0 flag set */
+                     194     ;  //TR0 = 0;  /* Stop timer0 */
+                     195     ;  //TF0 = 0;  /* Clear timer0 flag */
+                     196     ;       
+                     197     ;       #pragma asm
+                     198     ;       MOV TMOD, #21H
+0000 758921          199               MOV TMOD, #21H
+                     200     ;       MOV TH0, #0B1H
+0003 758CB1          201               MOV TH0, #0B1H
+                     202     ;       MOV TL0, #0E0H
+0006 758AE0          203               MOV TL0, #0E0H
+                     204     ;       SETB TR0
+0009 D28C            205               SETB TR0
+                     206     ;       JNB TF0, $
+000B 308DFD          207               JNB TF0, $
+                     208     ;       CLR TR0
+000E C28C            209               CLR TR0
+                     210     ;       CLR TF0
+0010 C28D            211               CLR TF0
+                     212     ;       #pragma endasm
+                     213     ; }
+                     214                             ; SOURCE LINE # 57
+0012 22              215             RET     
+                     216     ; END OF timer_delay20ms
+                     217     
+                     218     ; 
+                     219     ; void timer_delay30us()  /* Timer0 delay function */
+                     220     
+----                 221             RSEG  ?PR?timer_delay30us?DELAY
+0000                 222     timer_delay30us:
+                     223             USING   0
+                     224                             ; SOURCE LINE # 59
+                     225     ; {
+                     226                             ; SOURCE LINE # 60
+                     227     ;  //TMOD = 0x01;  /* Timer0 mode1 (16-bit timer mode) */
+                     228     ;  //TH0 = 0xFF;  /* Load higher 8-bit in TH0 */
+                     229     ;  //TL0 = 0xF1;  /* Load lower 8-bit in TL0 */
+                     230     ;  //TR0 = 1;  /* Start timer0 */
+                     231     ;  //while(TF0 == 0); /* Wait until timer0 flag set */
+                     232     ; // TR0 = 0;  /* Stop timer0 */
+                     233     ; // TF0 = 0;  /* Clear timer0 flag */
+                     234     ;       #pragma asm
+                     235     ;       MOV TMOD, #21H
+0000 758921          236               MOV TMOD, #21H
+                     237     ;       MOV TH0, #0FFH
+0003 758CFF          238               MOV TH0, #0FFH
+                     239     ;       MOV TL0, #0E2H
+0006 758AE2          240               MOV TL0, #0E2H
+                     241     ;       SETB TR0
+0009 D28C            242               SETB TR0
+                     243     ;       JNB TF0, $
+000B 308DFD          244               JNB TF0, $
+                     245     ;       CLR TR0
+000E C28C            246               CLR TR0
+                     247     ;       CLR TF0
+0010 C28D            248               CLR TF0
+                     249     ;       #pragma endasm
+                     250     ; }
+                     251                             ; SOURCE LINE # 77
+0012 22              252             RET     
+                     253     ; END OF timer_delay30us
+                     254     
+                     255     ; 
+A51 MACRO ASSEMBLER  DELAY                                                                03/18/2022 16:37:06 PAGE     5
+
+                     256     ; void timer_delay280us()  /* Timer0 delay function */
+                     257     
+----                 258             RSEG  ?PR?timer_delay280us?DELAY
+0000                 259     timer_delay280us:
+                     260             USING   0
+                     261                             ; SOURCE LINE # 79
+                     262     ; {
+                     263                             ; SOURCE LINE # 80
+                     264     ;       #pragma asm
+                     265     ;       MOV TMOD, #21H
+0000 758921          266               MOV TMOD, #21H
+                     267     ;       MOV TH0, #0FEH
+0003 758CFE          268               MOV TH0, #0FEH
+                     269     ;       MOV TL0, #0E8H
+0006 758AE8          270               MOV TL0, #0E8H
+                     271     ;       SETB TR0
+0009 D28C            272               SETB TR0
+                     273     ;       JNB TF0, $
+000B 308DFD          274               JNB TF0, $
+                     275     ;       CLR TR0
+000E C28C            276               CLR TR0
+                     277     ;       CLR TF0
+0010 C28D            278               CLR TF0
+                     279     ;       #pragma endasm
+                     280     ; }
+                     281                             ; SOURCE LINE # 90
+0012 22              282             RET     
+                     283     ; END OF timer_delay280us
+                     284     
+                     285     ; 
+                     286     ; 
+                     287     ; void timer_delay40us()  /* Timer0 delay function */
+                     288     
+----                 289             RSEG  ?PR?timer_delay40us?DELAY
+0000                 290     timer_delay40us:
+                     291             USING   0
+                     292                             ; SOURCE LINE # 93
+                     293     ; {
+                     294                             ; SOURCE LINE # 94
+                     295     ;       #pragma asm
+                     296     ;       MOV TMOD, #21H
+0000 758921          297               MOV TMOD, #21H
+                     298     ;       MOV TH0, #0FFH
+0003 758CFF          299               MOV TH0, #0FFH
+                     300     ;       MOV TL0, #0D8H
+0006 758AD8          301               MOV TL0, #0D8H
+                     302     ;       SETB TR0
+0009 D28C            303               SETB TR0
+                     304     ;       JNB TF0, $
+000B 308DFD          305               JNB TF0, $
+                     306     ;       CLR TR0
+000E C28C            307               CLR TR0
+                     308     ;       CLR TF0
+0010 C28D            309               CLR TF0
+                     310     ;       #pragma endasm
+                     311     ; }
+                     312                             ; SOURCE LINE # 104
+0012 22              313             RET     
+                     314     ; END OF timer_delay40us
+                     315     
+                     316     ; 
+                     317     ; 
+                     318     ; void timer_delay9680us()  /* Timer0 delay function */
+                     319     
+----                 320             RSEG  ?PR?timer_delay9680us?DELAY
+0000                 321     timer_delay9680us:
+A51 MACRO ASSEMBLER  DELAY                                                                03/18/2022 16:37:06 PAGE     6
+
+                     322             USING   0
+                     323                             ; SOURCE LINE # 107
+                     324     ; {     
+                     325                             ; SOURCE LINE # 108
+                     326     ;       #pragma asm
+                     327     ;       MOV TMOD, #21H
+0000 758921          328               MOV TMOD, #21H
+                     329     ;       MOV TH0, #0DAH
+0003 758CDA          330               MOV TH0, #0DAH
+                     331     ;       MOV TL0, #030H
+0006 758A30          332               MOV TL0, #030H
+                     333     ;       SETB TR0
+0009 D28C            334               SETB TR0
+                     335     ;       JNB TF0, $
+000B 308DFD          336               JNB TF0, $
+                     337     ;       CLR TR0
+000E C28C            338               CLR TR0
+                     339     ;       CLR TF0
+0010 C28D            340               CLR TF0
+                     341     ;       #pragma endasm
+                     342     ; }                     ; SOURCE LINE # 118
+0012 22              343             RET     
+                     344     ; END OF timer_delay9680us
+                     345     
+                     346             END
+A51 MACRO ASSEMBLER  DELAY                                                                03/18/2022 16:37:06 PAGE     7
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E                      T Y P E  V A L U E   ATTRIBUTES
+
+?C0001. . . . . . . . . . .  C ADDR   0009H   R   SEG=?PR?_DELAY_MS?DELAY
+?C0004. . . . . . . . . . .  C ADDR   0021H   R   SEG=?PR?_DELAY_MS?DELAY
+?C0011. . . . . . . . . . .  C ADDR   001FH   R   SEG=?PR?_DELAY_MS?DELAY
+?DT?_DELAY_MS?DELAY . . . .  D SEG    0004H       REL=UNIT
+?PR?TIMER_DELAY01US?DELAY .  C SEG    0013H       REL=UNIT
+?PR?TIMER_DELAY20MS?DELAY .  C SEG    0013H       REL=UNIT
+?PR?TIMER_DELAY280US?DELAY.  C SEG    0013H       REL=UNIT
+?PR?TIMER_DELAY30US?DELAY .  C SEG    0013H       REL=UNIT
+?PR?TIMER_DELAY40US?DELAY .  C SEG    0013H       REL=UNIT
+?PR?TIMER_DELAY9680US?DELAY  C SEG    0013H       REL=UNIT
+?PR?_DELAY_MS?DELAY . . . .  C SEG    0022H       REL=UNIT
+?_DELAY_MS?BYTE . . . . . .  D ADDR   0000H   R   SEG=?DT?_DELAY_MS?DELAY
+AC. . . . . . . . . . . . .  B ADDR   00D0H.6 A   
+ACC . . . . . . . . . . . .  D ADDR   00E0H   A   
+B . . . . . . . . . . . . .  D ADDR   00F0H   A   
+COUNT?040 . . . . . . . . .  D ADDR   0000H   R   SEG=?DT?_DELAY_MS?DELAY
+CY. . . . . . . . . . . . .  B ADDR   00D0H.7 A   
+DELAY . . . . . . . . . . .  N NUMB   -----       
+DPH . . . . . . . . . . . .  D ADDR   0083H   A   
+DPL . . . . . . . . . . . .  D ADDR   0082H   A   
+EA. . . . . . . . . . . . .  B ADDR   00A8H.7 A   
+ES. . . . . . . . . . . . .  B ADDR   00A8H.4 A   
+ET0 . . . . . . . . . . . .  B ADDR   00A8H.1 A   
+ET1 . . . . . . . . . . . .  B ADDR   00A8H.3 A   
+EX0 . . . . . . . . . . . .  B ADDR   00A8H.0 A   
+EX1 . . . . . . . . . . . .  B ADDR   00A8H.2 A   
+F0. . . . . . . . . . . . .  B ADDR   00D0H.5 A   
+I?041 . . . . . . . . . . .  D ADDR   0002H   R   SEG=?DT?_DELAY_MS?DELAY
+IE. . . . . . . . . . . . .  D ADDR   00A8H   A   
+IE0 . . . . . . . . . . . .  B ADDR   0088H.1 A   
+IE1 . . . . . . . . . . . .  B ADDR   0088H.3 A   
+INT0. . . . . . . . . . . .  B ADDR   00B0H.2 A   
+INT1. . . . . . . . . . . .  B ADDR   00B0H.3 A   
+IP. . . . . . . . . . . . .  D ADDR   00B8H   A   
+IT0 . . . . . . . . . . . .  B ADDR   0088H.0 A   
+IT1 . . . . . . . . . . . .  B ADDR   0088H.2 A   
+OV. . . . . . . . . . . . .  B ADDR   00D0H.2 A   
+P . . . . . . . . . . . . .  B ADDR   00D0H.0 A   
+P0. . . . . . . . . . . . .  D ADDR   0080H   A   
+P1. . . . . . . . . . . . .  D ADDR   0090H   A   
+P2. . . . . . . . . . . . .  D ADDR   00A0H   A   
+P3. . . . . . . . . . . . .  D ADDR   00B0H   A   
+PCON. . . . . . . . . . . .  D ADDR   0087H   A   
+PS. . . . . . . . . . . . .  B ADDR   00B8H.4 A   
+PSW . . . . . . . . . . . .  D ADDR   00D0H   A   
+PT0 . . . . . . . . . . . .  B ADDR   00B8H.1 A   
+PT1 . . . . . . . . . . . .  B ADDR   00B8H.3 A   
+PX0 . . . . . . . . . . . .  B ADDR   00B8H.0 A   
+PX1 . . . . . . . . . . . .  B ADDR   00B8H.2 A   
+RB8 . . . . . . . . . . . .  B ADDR   0098H.2 A   
+RD. . . . . . . . . . . . .  B ADDR   00B0H.7 A   
+REN . . . . . . . . . . . .  B ADDR   0098H.4 A   
+RI. . . . . . . . . . . . .  B ADDR   0098H.0 A   
+RS0 . . . . . . . . . . . .  B ADDR   00D0H.3 A   
+RS1 . . . . . . . . . . . .  B ADDR   00D0H.4 A   
+RXD . . . . . . . . . . . .  B ADDR   00B0H.0 A   
+SBUF. . . . . . . . . . . .  D ADDR   0099H   A   
+SCON. . . . . . . . . . . .  D ADDR   0098H   A   
+SM0 . . . . . . . . . . . .  B ADDR   0098H.7 A   
+SM1 . . . . . . . . . . . .  B ADDR   0098H.6 A   
+A51 MACRO ASSEMBLER  DELAY                                                                03/18/2022 16:37:06 PAGE     8
+
+SM2 . . . . . . . . . . . .  B ADDR   0098H.5 A   
+SP. . . . . . . . . . . . .  D ADDR   0081H   A   
+T0. . . . . . . . . . . . .  B ADDR   00B0H.4 A   
+T1. . . . . . . . . . . . .  B ADDR   00B0H.5 A   
+TB8 . . . . . . . . . . . .  B ADDR   0098H.3 A   
+TCON. . . . . . . . . . . .  D ADDR   0088H   A   
+TF0 . . . . . . . . . . . .  B ADDR   0088H.5 A   
+TF1 . . . . . . . . . . . .  B ADDR   0088H.7 A   
+TH0 . . . . . . . . . . . .  D ADDR   008CH   A   
+TH1 . . . . . . . . . . . .  D ADDR   008DH   A   
+TI. . . . . . . . . . . . .  B ADDR   0098H.1 A   
+TIMER_DELAY01US . . . . . .  C ADDR   0000H   R   SEG=?PR?TIMER_DELAY01US?DELAY
+TIMER_DELAY20MS . . . . . .  C ADDR   0000H   R   SEG=?PR?TIMER_DELAY20MS?DELAY
+TIMER_DELAY280US. . . . . .  C ADDR   0000H   R   SEG=?PR?TIMER_DELAY280US?DELAY
+TIMER_DELAY30US . . . . . .  C ADDR   0000H   R   SEG=?PR?TIMER_DELAY30US?DELAY
+TIMER_DELAY40US . . . . . .  C ADDR   0000H   R   SEG=?PR?TIMER_DELAY40US?DELAY
+TIMER_DELAY9680US . . . . .  C ADDR   0000H   R   SEG=?PR?TIMER_DELAY9680US?DELAY
+TL0 . . . . . . . . . . . .  D ADDR   008AH   A   
+TL1 . . . . . . . . . . . .  D ADDR   008BH   A   
+TMOD. . . . . . . . . . . .  D ADDR   0089H   A   
+TR0 . . . . . . . . . . . .  B ADDR   0088H.4 A   
+TR1 . . . . . . . . . . . .  B ADDR   0088H.6 A   
+TXD . . . . . . . . . . . .  B ADDR   00B0H.1 A   
+WR. . . . . . . . . . . . .  B ADDR   00B0H.6 A   
+_DELAY_MS . . . . . . . . .  C ADDR   0000H   R   SEG=?PR?_DELAY_MS?DELAY
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

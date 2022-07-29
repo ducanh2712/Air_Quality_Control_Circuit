@@ -1,0 +1,378 @@
+A51 MACRO ASSEMBLER  UART                                                                 03/18/2022 16:37:06 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\uart.OBJ
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE .\Objects\uart.src PR(.\Listings\uart.ls1) EP DEBUG
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     ; .\Objects\uart.SRC generated from: uart.c
+                       2     ; COMPILER INVOKED BY:
+                       3     ;        C:\Keil_v5\C51\BIN\C51.EXE uart.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRIN
+                             T(.\Listings\uart.lst) TABS(2) SRC(.\Objects\uart.SRC)
+                       4     
+                       5     $nomod51 
+                       6     
+                       7     NAME    UART
+                       8     
+  0080                 9     P0      DATA    080H
+  0090                10     P1      DATA    090H
+  00A0                11     P2      DATA    0A0H
+  00B0                12     P3      DATA    0B0H
+  00B5                13     MQ05    BIT     0B0H.5
+  00B4                14     T0      BIT     0B0H.4
+  00D6                15     AC      BIT     0D0H.6
+  00B5                16     T1      BIT     0B0H.5
+  00AF                17     EA      BIT     0A8H.7
+  00B7                18     LED_LCD BIT     0B0H.7
+  0094                19     ADC0804_RD      BIT     090H.4
+  0093                20     ADC0804_CS      BIT     090H.3
+  00A8                21     IE      DATA    0A8H
+  0090                22     EN      BIT     090H.0
+  00B7                23     RD      BIT     0B0H.7
+  00AC                24     ES      BIT     0A8H.4
+  00B8                25     IP      DATA    0B8H
+  0098                26     RI      BIT     098H.0
+  00B2                27     INT0    BIT     0B0H.2
+  00D7                28     CY      BIT     0D0H.7
+  0099                29     TI      BIT     098H.1
+  00B3                30     INT1    BIT     0B0H.3
+  00B3                31     INT_LCD BIT     0B0H.3
+  0095                32     ADC0804_WR      BIT     090H.5
+  00BC                33     PS      BIT     0B8H.4
+  0081                34     SP      DATA    081H
+  0092                35     RS      BIT     090H.2
+  00D2                36     OV      BIT     0D0H.2
+  0091                37     RW      BIT     090H.1
+  00B6                38     WR      BIT     0B0H.6
+  0099                39     SBUF    DATA    099H
+  0087                40     PCON    DATA    087H
+  0098                41     SCON    DATA    098H
+  00B3                42     ADC0804_INTR    BIT     0B0H.3
+  0089                43     TMOD    DATA    089H
+  0088                44     TCON    DATA    088H
+  0089                45     IE0     BIT     088H.1
+  008B                46     IE1     BIT     088H.3
+  00F0                47     B       DATA    0F0H
+  00B4                48     DHT11   BIT     0B0H.4
+  00E0                49     ACC     DATA    0E0H
+  00B0                50     UART_RX BIT     0B0H.0
+  00A9                51     ET0     BIT     0A8H.1
+  00B1                52     UART_TX BIT     0B0H.1
+  00AB                53     ET1     BIT     0A8H.3
+  008D                54     TF0     BIT     088H.5
+  008F                55     TF1     BIT     088H.7
+  009A                56     RB8     BIT     098H.2
+  008C                57     TH0     DATA    08CH
+A51 MACRO ASSEMBLER  UART                                                                 03/18/2022 16:37:06 PAGE     2
+
+  00A8                58     EX0     BIT     0A8H.0
+  0088                59     IT0     BIT     088H.0
+  008D                60     TH1     DATA    08DH
+  009B                61     TB8     BIT     098H.3
+  00AA                62     EX1     BIT     0A8H.2
+  008A                63     IT1     BIT     088H.2
+  00D0                64     P       BIT     0D0H.0
+  009F                65     SM0     BIT     098H.7
+  008A                66     TL0     DATA    08AH
+  009E                67     SM1     BIT     098H.6
+  008B                68     TL1     DATA    08BH
+  009D                69     SM2     BIT     098H.5
+  00B9                70     PT0     BIT     0B8H.1
+  00BB                71     PT1     BIT     0B8H.3
+  00D3                72     RS0     BIT     0D0H.3
+  008C                73     TR0     BIT     088H.4
+  00D4                74     RS1     BIT     0D0H.4
+  008E                75     TR1     BIT     088H.6
+  00B8                76     PX0     BIT     0B8H.0
+  00BA                77     PX1     BIT     0B8H.2
+  0083                78     DPH     DATA    083H
+  0082                79     DPL     DATA    082H
+  009C                80     REN     BIT     098H.4
+  00B0                81     RXD     BIT     0B0H.0
+  00B1                82     TXD     BIT     0B0H.1
+  00B6                83     LED_GPMY        BIT     0B0H.6
+  00D5                84     F0      BIT     0D0H.5
+  00D0                85     PSW     DATA    0D0H
+                      86     ?PR?Uart_Init?UART   SEGMENT CODE 
+                      87     ?PR?_Uart_Write?UART SEGMENT CODE 
+                      88     ?PR?_Uart_Write_Text?UART                SEGMENT CODE 
+                      89     ?DT?_Uart_Write_Text?UART                SEGMENT DATA OVERLAYABLE 
+                      90     ?PR?Uart_Data_Ready?UART                 SEGMENT CODE 
+                      91     ?PR?Uart_Read?UART   SEGMENT CODE 
+                      92             EXTRN   CODE (?C?CLDOPTR)
+                      93             PUBLIC  Uart_Read
+                      94             PUBLIC  Uart_Data_Ready
+                      95             PUBLIC  _Uart_Write_Text
+                      96             PUBLIC  _Uart_Write
+                      97             PUBLIC  Uart_Init
+                      98     
+----                  99             RSEG  ?DT?_Uart_Write_Text?UART
+0000                 100     ?_Uart_Write_Text?BYTE:
+0000                 101             str?241:   DS   3
+                     102     ; #include <reg51.h>
+                     103     ; #include "uart.h"
+                     104     ; #include "port.h"
+                     105     ; #include <stdio.h>
+                     106     ; 
+                     107     ; void Uart_Init()
+                     108     
+----                 109             RSEG  ?PR?Uart_Init?UART
+0000                 110     Uart_Init:
+                     111                             ; SOURCE LINE # 6
+                     112     ; {
+                     113                             ; SOURCE LINE # 7
+                     114     ;               // Khoi tao UART o mode 1, 1200 baud
+                     115     ;       SM0 = 0; SM1 = 1;               // Chon UART mode 1
+                     116                             ; SOURCE LINE # 9
+0000 C29F            117             CLR     SM0
+0002 D29E            118             SETB    SM1
+                     119     ;       TMOD = 0x21;            // 0010 xxxx - Timer1 hoat dong o che do 8bit tu dong nap l
+                             ai
+                     120                             ; SOURCE LINE # 10
+0004 758921          121             MOV     TMOD,#021H
+                     122     ;       TH1 = 0xE6;                             // Toc do baud 1200
+A51 MACRO ASSEMBLER  UART                                                                 03/18/2022 16:37:06 PAGE     3
+
+                     123                             ; SOURCE LINE # 11
+0007 758DE6          124             MOV     TH1,#0E6H
+                     125     ;       TR1 = 1;                                // Timer1 bat dau chay
+                     126                             ; SOURCE LINE # 12
+000A D28E            127             SETB    TR1
+                     128     ;       TI = 1;                                 // San sang gui du lieu
+                     129                             ; SOURCE LINE # 13
+000C D299            130             SETB    TI
+                     131     ; }
+                     132                             ; SOURCE LINE # 14
+000E 22              133             RET     
+                     134     ; END OF Uart_Init
+                     135     
+                     136     ; 
+                     137     ; void Uart_Write(char c)
+                     138     
+----                 139             RSEG  ?PR?_Uart_Write?UART
+0000                 140     _Uart_Write:
+                     141                             ; SOURCE LINE # 16
+                     142     ;---- Variable 'c?140' assigned to Register 'R7' ----
+                     143     ; {
+                     144                             ; SOURCE LINE # 17
+                     145     ;       SBUF = c;
+                     146                             ; SOURCE LINE # 18
+0000 8F99            147             MOV     SBUF,R7
+0002                 148     ?C0002:
+                     149     ;       while(TI == 0);
+                     150                             ; SOURCE LINE # 19
+0002 3099FD          151             JNB     TI,?C0002
+                     152     ;       TI = 0;
+                     153                             ; SOURCE LINE # 20
+0005 C299            154             CLR     TI
+                     155     ;       
+                     156     ;       
+                     157     ; }
+                     158                             ; SOURCE LINE # 23
+0007 22              159             RET     
+                     160     ; END OF _Uart_Write
+                     161     
+                     162     ; 
+                     163     ; void Uart_Write_Text(char * str)
+                     164     
+----                 165             RSEG  ?PR?_Uart_Write_Text?UART
+0000                 166     _Uart_Write_Text:
+                     167             USING   0
+                     168                             ; SOURCE LINE # 25
+0000 8B00     F      169             MOV     str?241,R3
+0002 8A00     F      170             MOV     str?241+01H,R2
+0004 8900     F      171             MOV     str?241+02H,R1
+                     172     ; {
+                     173                             ; SOURCE LINE # 26
+                     174     ;       unsigned char i = 0;
+                     175                             ; SOURCE LINE # 27
+                     176     ;---- Variable 'i?242' assigned to Register 'R6' ----
+0006 E4              177             CLR     A
+0007 FE              178             MOV     R6,A
+0008                 179     ?C0005:
+                     180     ;       while(str[i]!=0)
+                     181                             ; SOURCE LINE # 28
+0008 AB00     F      182             MOV     R3,str?241
+000A AA00     F      183             MOV     R2,str?241+01H
+000C A900     F      184             MOV     R1,str?241+02H
+000E 8E82            185             MOV     DPL,R6
+0010 758300          186             MOV     DPH,#00H
+0013 120000   F      187             LCALL   ?C?CLDOPTR
+0016 FF              188             MOV     R7,A
+A51 MACRO ASSEMBLER  UART                                                                 03/18/2022 16:37:06 PAGE     4
+
+0017 FD              189             MOV     R5,A
+0018 33              190             RLC     A
+0019 95E0            191             SUBB    A,ACC
+001B 4D              192             ORL     A,R5
+001C 6006            193             JZ      ?C0007
+                     194     ;       {
+                     195                             ; SOURCE LINE # 29
+                     196     ;               Uart_Write(str[i]);
+                     197                             ; SOURCE LINE # 30
+001E 120000   F      198             LCALL   _Uart_Write
+                     199     ;               i++;
+                     200                             ; SOURCE LINE # 31
+0021 0E              201             INC     R6
+                     202     ;       }
+                     203                             ; SOURCE LINE # 32
+0022 80E4            204             SJMP    ?C0005
+                     205     ; }
+                     206                             ; SOURCE LINE # 33
+0024                 207     ?C0007:
+0024 22              208             RET     
+                     209     ; END OF _Uart_Write_Text
+                     210     
+                     211     ; 
+                     212     ; char Uart_Data_Ready()
+                     213     
+----                 214             RSEG  ?PR?Uart_Data_Ready?UART
+0000                 215     Uart_Data_Ready:
+                     216             USING   0
+                     217                             ; SOURCE LINE # 35
+                     218     ; {
+                     219                             ; SOURCE LINE # 36
+                     220     ;       return RI;
+                     221                             ; SOURCE LINE # 37
+0000 A298            222             MOV     C,RI
+0002 E4              223             CLR     A
+0003 33              224             RLC     A
+0004 FF              225             MOV     R7,A
+                     226     ; }
+                     227                             ; SOURCE LINE # 38
+0005 22              228             RET     
+                     229     ; END OF Uart_Data_Ready
+                     230     
+                     231     ; 
+                     232     ; char Uart_Read()
+                     233     
+----                 234             RSEG  ?PR?Uart_Read?UART
+0000                 235     Uart_Read:
+                     236             USING   0
+                     237                             ; SOURCE LINE # 40
+                     238     ; {
+                     239                             ; SOURCE LINE # 41
+                     240     ;       RI = 0;
+                     241                             ; SOURCE LINE # 42
+0000 C298            242             CLR     RI
+                     243     ;       return SBUF;
+                     244                             ; SOURCE LINE # 43
+0002 AF99            245             MOV     R7,SBUF
+                     246     ; }                     ; SOURCE LINE # 44
+0004 22              247             RET     
+                     248     ; END OF Uart_Read
+                     249     
+                     250             END
+A51 MACRO ASSEMBLER  UART                                                                 03/18/2022 16:37:06 PAGE     5
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E                    T Y P E  V A L U E   ATTRIBUTES
+
+?C0002. . . . . . . . . .  C ADDR   0002H   R   SEG=?PR?_UART_WRITE?UART
+?C0005. . . . . . . . . .  C ADDR   0008H   R   SEG=?PR?_UART_WRITE_TEXT?UART
+?C0007. . . . . . . . . .  C ADDR   0024H   R   SEG=?PR?_UART_WRITE_TEXT?UART
+?C?CLDOPTR. . . . . . . .  C ADDR   -----       EXT
+?DT?_UART_WRITE_TEXT?UART  D SEG    0003H       REL=UNIT
+?PR?UART_DATA_READY?UART.  C SEG    0006H       REL=UNIT
+?PR?UART_INIT?UART. . . .  C SEG    000FH       REL=UNIT
+?PR?UART_READ?UART. . . .  C SEG    0005H       REL=UNIT
+?PR?_UART_WRITE?UART. . .  C SEG    0008H       REL=UNIT
+?PR?_UART_WRITE_TEXT?UART  C SEG    0025H       REL=UNIT
+?_UART_WRITE_TEXT?BYTE. .  D ADDR   0000H   R   SEG=?DT?_UART_WRITE_TEXT?UART
+AC. . . . . . . . . . . .  B ADDR   00D0H.6 A   
+ACC . . . . . . . . . . .  D ADDR   00E0H   A   
+ADC0804_CS. . . . . . . .  B ADDR   0090H.3 A   
+ADC0804_INTR. . . . . . .  B ADDR   00B0H.3 A   
+ADC0804_RD. . . . . . . .  B ADDR   0090H.4 A   
+ADC0804_WR. . . . . . . .  B ADDR   0090H.5 A   
+B . . . . . . . . . . . .  D ADDR   00F0H   A   
+CY. . . . . . . . . . . .  B ADDR   00D0H.7 A   
+DHT11 . . . . . . . . . .  B ADDR   00B0H.4 A   
+DPH . . . . . . . . . . .  D ADDR   0083H   A   
+DPL . . . . . . . . . . .  D ADDR   0082H   A   
+EA. . . . . . . . . . . .  B ADDR   00A8H.7 A   
+EN. . . . . . . . . . . .  B ADDR   0090H.0 A   
+ES. . . . . . . . . . . .  B ADDR   00A8H.4 A   
+ET0 . . . . . . . . . . .  B ADDR   00A8H.1 A   
+ET1 . . . . . . . . . . .  B ADDR   00A8H.3 A   
+EX0 . . . . . . . . . . .  B ADDR   00A8H.0 A   
+EX1 . . . . . . . . . . .  B ADDR   00A8H.2 A   
+F0. . . . . . . . . . . .  B ADDR   00D0H.5 A   
+IE. . . . . . . . . . . .  D ADDR   00A8H   A   
+IE0 . . . . . . . . . . .  B ADDR   0088H.1 A   
+IE1 . . . . . . . . . . .  B ADDR   0088H.3 A   
+INT0. . . . . . . . . . .  B ADDR   00B0H.2 A   
+INT1. . . . . . . . . . .  B ADDR   00B0H.3 A   
+INT_LCD . . . . . . . . .  B ADDR   00B0H.3 A   
+IP. . . . . . . . . . . .  D ADDR   00B8H   A   
+IT0 . . . . . . . . . . .  B ADDR   0088H.0 A   
+IT1 . . . . . . . . . . .  B ADDR   0088H.2 A   
+LED_GPMY. . . . . . . . .  B ADDR   00B0H.6 A   
+LED_LCD . . . . . . . . .  B ADDR   00B0H.7 A   
+MQ05. . . . . . . . . . .  B ADDR   00B0H.5 A   
+OV. . . . . . . . . . . .  B ADDR   00D0H.2 A   
+P . . . . . . . . . . . .  B ADDR   00D0H.0 A   
+P0. . . . . . . . . . . .  D ADDR   0080H   A   
+P1. . . . . . . . . . . .  D ADDR   0090H   A   
+P2. . . . . . . . . . . .  D ADDR   00A0H   A   
+P3. . . . . . . . . . . .  D ADDR   00B0H   A   
+PCON. . . . . . . . . . .  D ADDR   0087H   A   
+PS. . . . . . . . . . . .  B ADDR   00B8H.4 A   
+PSW . . . . . . . . . . .  D ADDR   00D0H   A   
+PT0 . . . . . . . . . . .  B ADDR   00B8H.1 A   
+PT1 . . . . . . . . . . .  B ADDR   00B8H.3 A   
+PX0 . . . . . . . . . . .  B ADDR   00B8H.0 A   
+PX1 . . . . . . . . . . .  B ADDR   00B8H.2 A   
+RB8 . . . . . . . . . . .  B ADDR   0098H.2 A   
+RD. . . . . . . . . . . .  B ADDR   00B0H.7 A   
+REN . . . . . . . . . . .  B ADDR   0098H.4 A   
+RI. . . . . . . . . . . .  B ADDR   0098H.0 A   
+RS. . . . . . . . . . . .  B ADDR   0090H.2 A   
+A51 MACRO ASSEMBLER  UART                                                                 03/18/2022 16:37:06 PAGE     6
+
+RS0 . . . . . . . . . . .  B ADDR   00D0H.3 A   
+RS1 . . . . . . . . . . .  B ADDR   00D0H.4 A   
+RW. . . . . . . . . . . .  B ADDR   0090H.1 A   
+RXD . . . . . . . . . . .  B ADDR   00B0H.0 A   
+SBUF. . . . . . . . . . .  D ADDR   0099H   A   
+SCON. . . . . . . . . . .  D ADDR   0098H   A   
+SM0 . . . . . . . . . . .  B ADDR   0098H.7 A   
+SM1 . . . . . . . . . . .  B ADDR   0098H.6 A   
+SM2 . . . . . . . . . . .  B ADDR   0098H.5 A   
+SP. . . . . . . . . . . .  D ADDR   0081H   A   
+STR?241 . . . . . . . . .  D ADDR   0000H   R   SEG=?DT?_UART_WRITE_TEXT?UART
+T0. . . . . . . . . . . .  B ADDR   00B0H.4 A   
+T1. . . . . . . . . . . .  B ADDR   00B0H.5 A   
+TB8 . . . . . . . . . . .  B ADDR   0098H.3 A   
+TCON. . . . . . . . . . .  D ADDR   0088H   A   
+TF0 . . . . . . . . . . .  B ADDR   0088H.5 A   
+TF1 . . . . . . . . . . .  B ADDR   0088H.7 A   
+TH0 . . . . . . . . . . .  D ADDR   008CH   A   
+TH1 . . . . . . . . . . .  D ADDR   008DH   A   
+TI. . . . . . . . . . . .  B ADDR   0098H.1 A   
+TL0 . . . . . . . . . . .  D ADDR   008AH   A   
+TL1 . . . . . . . . . . .  D ADDR   008BH   A   
+TMOD. . . . . . . . . . .  D ADDR   0089H   A   
+TR0 . . . . . . . . . . .  B ADDR   0088H.4 A   
+TR1 . . . . . . . . . . .  B ADDR   0088H.6 A   
+TXD . . . . . . . . . . .  B ADDR   00B0H.1 A   
+UART. . . . . . . . . . .  N NUMB   -----       
+UART_DATA_READY . . . . .  C ADDR   0000H   R   SEG=?PR?UART_DATA_READY?UART
+UART_INIT . . . . . . . .  C ADDR   0000H   R   SEG=?PR?UART_INIT?UART
+UART_READ . . . . . . . .  C ADDR   0000H   R   SEG=?PR?UART_READ?UART
+UART_RX . . . . . . . . .  B ADDR   00B0H.0 A   
+UART_TX . . . . . . . . .  B ADDR   00B0H.1 A   
+WR. . . . . . . . . . . .  B ADDR   00B0H.6 A   
+_UART_WRITE . . . . . . .  C ADDR   0000H   R   SEG=?PR?_UART_WRITE?UART
+_UART_WRITE_TEXT. . . . .  C ADDR   0000H   R   SEG=?PR?_UART_WRITE_TEXT?UART
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

@@ -1,0 +1,159 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              03/18/2022 16:37:05 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+NO OBJECT MODULE REQUESTED
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) SRC(.\Objects\main.SRC)
+
+line level    source
+
+   1          #include <reg51.h>
+   2          #include <stdio.h>
+   3          #include <string.h>
+   4          #include <stdlib.h>
+   5          #include "main.h"
+   6          #include "port.h"
+   7          #include "lcd.h"
+   8          #include "dht.h"
+   9          #include "delay.h"
+  10          #include "ADC0804.h"
+  11          #include "uart.h"
+  12          
+  13          volatile int I_RH, D_RH, I_Temp, D_Temp, CheckSum;
+  14          volatile unsigned char dat[20];
+  15          volatile unsigned int adc_value_GPMY, voltage_GPMY, dustDensity;
+  16          
+  17          sbit led = P2^0;
+  18          
+  19          void get_DHT11();
+  20          void get_MQ05();
+  21          void get_GPMY();
+  22          
+  23          void reverse(char *s){
+  24   1        char * j;
+  25   1        int c;
+  26   1        j = s + strlen(s) - 1;
+  27   1        while (s < j) {
+  28   2          c = * s;
+  29   2          * s++ = * j;
+  30   2          * j-- = c;
+  31   2        }
+  32   1      }
+  33          
+  34          void itoa(int n, char s[]) {
+  35   1        int i, sign;
+  36   1      
+  37   1        if ((sign = n) < 0) 
+  38   1          n = -n; 
+  39   1        i = 0;
+  40   1        do {
+  41   2          s[i++] = n % 10 + '0';
+  42   2        } while ((n /= 10) > 0); 
+  43   1        if (sign < 0)
+  44   1          s[i++] = '-';
+  45   1        s[i] = '\0';
+  46   1        reverse(s);
+  47   1      }
+  48          
+  49          void main() {
+  50   1        
+  51   1        Uart_Init();
+  52   1        
+  53   1        LCD_Init();
+  54   1        while (1) {
+C51 COMPILER V9.60.0.0   MAIN                                                              03/18/2022 16:37:05 PAGE 2   
+
+  55   2          volatile unsigned char dat[20];
+  56   2          get_DHT11();
+  57   2          get_MQ05();
+  58   2          get_GPMY();
+  59   2          delay_ms(1000);
+  60   2          
+  61   2        }
+  62   1      }
+*** WARNING C280 IN LINE 55 OF main.c: 'dat': unreferenced local variable
+  63          
+  64          void get_DHT11() {
+  65   1        Request();
+  66   1        Response();
+  67   1      
+  68   1        I_RH = Receive_data();
+  69   1        D_RH = Receive_data();
+  70   1        I_Temp = Receive_data();
+  71   1        D_Temp = Receive_data();
+  72   1        CheckSum = Receive_data();
+  73   1        
+  74   1        if ((I_RH + D_RH + I_Temp + D_Temp) != CheckSum) {
+  75   2          LCD_String_xy(1,1,"Error");
+  76   2        }
+  77   1        else{
+  78   2          itoa(I_RH, dat);
+  79   2          LCD_String_xy(1,1,"RH:");
+  80   2          LCD_String(dat);
+  81   2          itoa(I_Temp, dat);
+  82   2          LCD_String(" T:");
+  83   2          LCD_String(dat);
+  84   2          itoa(I_RH/10, dat);
+  85   2          Uart_Write_Text(dat);
+  86   2          itoa(I_RH%10, dat);
+  87   2          Uart_Write_Text(dat);
+  88   2          itoa(I_Temp/10, dat);
+  89   2          Uart_Write_Text(dat);
+  90   2          itoa(I_Temp%10, dat);
+  91   2          Uart_Write_Text(dat);
+  92   2          delay_ms(500);  
+  93   2        }
+  94   1      }
+  95          
+  96          void get_GPMY() {
+  97   1        
+  98   1        LCD_String_xy(2,1,"Bui min:");
+  99   1        LED_GPMY = 1;
+ 100   1        timer_delay280us();
+ 101   1        voltage_GPMY = ADC0804_Read();
+ 102   1        timer_delay40us();
+ 103   1        LED_GPMY = 0;
+ 104   1        timer_delay9680us();
+ 105   1        
+ 106   1        itoa(voltage_GPMY/100, dat);
+ 107   1        LCD_String(dat);
+ 108   1        Uart_Write_Text(dat);
+ 109   1        itoa((voltage_GPMY/10)%10, dat);
+ 110   1        LCD_String(dat);
+ 111   1        Uart_Write_Text(dat);
+ 112   1        itoa(voltage_GPMY%10, dat);
+ 113   1        LCD_String(dat);
+ 114   1        Uart_Write_Text(dat);
+ 115   1        delay_ms(500);
+C51 COMPILER V9.60.0.0   MAIN                                                              03/18/2022 16:37:05 PAGE 3   
+
+ 116   1      }
+ 117          
+ 118          void get_MQ05() {
+ 119   1        if (MQ05)
+ 120   1        {
+ 121   2          LCD_String(" GAS:0");
+ 122   2          Uart_Write_Text("0");
+ 123   2        }
+ 124   1        else
+ 125   1        {
+ 126   2          LCD_String(" GAS:1");
+ 127   2          Uart_Write_Text("1");
+ 128   2        }
+ 129   1        delay_ms(500);
+ 130   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    795    ----
+   CONSTANT SIZE    =     41    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     36      35
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

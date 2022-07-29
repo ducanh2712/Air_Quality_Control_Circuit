@@ -1,0 +1,10 @@
+"main.obj",
+"lcd.obj",
+"dht.obj",
+"delay.obj",
+"uart.obj",
+"interrupt.obj",
+"STARTUP.obj",
+"C:\Keil_v5\C51\LIB\C51C.LIB" 
+TO "Test8051" 
+PRINT(".\Listings\Test8051.m51") RAMSIZE(256) 

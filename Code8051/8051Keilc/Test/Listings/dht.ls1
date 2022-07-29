@@ -1,0 +1,363 @@
+A51 MACRO ASSEMBLER  DHT                                                                  03/18/2022 16:37:06 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\dht.OBJ
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE .\Objects\dht.src PR(.\Listings\dht.ls1) EP DEBUG
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     ; .\Objects\dht.SRC generated from: dht.c
+                       2     ; COMPILER INVOKED BY:
+                       3     ;        C:\Keil_v5\C51\BIN\C51.EXE dht.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT
+                             (.\Listings\dht.lst) TABS(2) SRC(.\Objects\dht.SRC)
+                       4     
+                       5     $nomod51 
+                       6     
+                       7     NAME    DHT
+                       8     
+  0080                 9     P0      DATA    080H
+  0090                10     P1      DATA    090H
+  00A0                11     P2      DATA    0A0H
+  00B0                12     P3      DATA    0B0H
+  00B5                13     MQ05    BIT     0B0H.5
+  00B4                14     T0      BIT     0B0H.4
+  00D6                15     AC      BIT     0D0H.6
+  00B5                16     T1      BIT     0B0H.5
+  00AF                17     EA      BIT     0A8H.7
+  00B7                18     LED_LCD BIT     0B0H.7
+  0094                19     ADC0804_RD      BIT     090H.4
+  0093                20     ADC0804_CS      BIT     090H.3
+  00A8                21     IE      DATA    0A8H
+  0090                22     EN      BIT     090H.0
+  00B7                23     RD      BIT     0B0H.7
+  00AC                24     ES      BIT     0A8H.4
+  00B8                25     IP      DATA    0B8H
+  0098                26     RI      BIT     098H.0
+  00B2                27     INT0    BIT     0B0H.2
+  00D7                28     CY      BIT     0D0H.7
+  0099                29     TI      BIT     098H.1
+  00B3                30     INT1    BIT     0B0H.3
+  00B3                31     INT_LCD BIT     0B0H.3
+  0095                32     ADC0804_WR      BIT     090H.5
+  00BC                33     PS      BIT     0B8H.4
+  0081                34     SP      DATA    081H
+  0092                35     RS      BIT     090H.2
+  00D2                36     OV      BIT     0D0H.2
+  0091                37     RW      BIT     090H.1
+  00B6                38     WR      BIT     0B0H.6
+  0099                39     SBUF    DATA    099H
+  0087                40     PCON    DATA    087H
+  0098                41     SCON    DATA    098H
+  00B3                42     ADC0804_INTR    BIT     0B0H.3
+  0089                43     TMOD    DATA    089H
+  0088                44     TCON    DATA    088H
+  0089                45     IE0     BIT     088H.1
+  008B                46     IE1     BIT     088H.3
+  00F0                47     B       DATA    0F0H
+  00B4                48     DHT11   BIT     0B0H.4
+  00E0                49     ACC     DATA    0E0H
+  00B0                50     UART_RX BIT     0B0H.0
+  00A9                51     ET0     BIT     0A8H.1
+  00B1                52     UART_TX BIT     0B0H.1
+  00AB                53     ET1     BIT     0A8H.3
+  008D                54     TF0     BIT     088H.5
+  008F                55     TF1     BIT     088H.7
+  009A                56     RB8     BIT     098H.2
+  008C                57     TH0     DATA    08CH
+A51 MACRO ASSEMBLER  DHT                                                                  03/18/2022 16:37:06 PAGE     2
+
+  00A8                58     EX0     BIT     0A8H.0
+  0088                59     IT0     BIT     088H.0
+  008D                60     TH1     DATA    08DH
+  009B                61     TB8     BIT     098H.3
+  00AA                62     EX1     BIT     0A8H.2
+  008A                63     IT1     BIT     088H.2
+  00D0                64     P       BIT     0D0H.0
+  009F                65     SM0     BIT     098H.7
+  008A                66     TL0     DATA    08AH
+  009E                67     SM1     BIT     098H.6
+  008B                68     TL1     DATA    08BH
+  009D                69     SM2     BIT     098H.5
+  00B9                70     PT0     BIT     0B8H.1
+  00BB                71     PT1     BIT     0B8H.3
+  00D3                72     RS0     BIT     0D0H.3
+  008C                73     TR0     BIT     088H.4
+  00D4                74     RS1     BIT     0D0H.4
+  008E                75     TR1     BIT     088H.6
+  00B8                76     PX0     BIT     0B8H.0
+  00BA                77     PX1     BIT     0B8H.2
+  0083                78     DPH     DATA    083H
+  0082                79     DPL     DATA    082H
+  009C                80     REN     BIT     098H.4
+  00B0                81     RXD     BIT     0B0H.0
+  00B1                82     TXD     BIT     0B0H.1
+  00B6                83     LED_GPMY        BIT     0B0H.6
+  00D5                84     F0      BIT     0D0H.5
+  00D0                85     PSW     DATA    0D0H
+                      86     ?PR?Request?DHT      SEGMENT CODE 
+                      87     ?PR?Response?DHT     SEGMENT CODE 
+                      88     ?PR?Receive_data?DHT SEGMENT CODE 
+                      89     ?DT?Receive_data?DHT SEGMENT DATA OVERLAYABLE 
+                      90             EXTRN   CODE (timer_delay20ms)
+                      91             EXTRN   CODE (timer_delay30us)
+                      92             PUBLIC  Receive_data
+                      93             PUBLIC  Response
+                      94             PUBLIC  Request
+                      95     
+----                  96             RSEG  ?DT?Receive_data?DHT
+0000                  97     ?Receive_data?BYTE:
+0000                  98               q?240:   DS   2
+0002                  99             ORG  2
+0002                 100               c?241:   DS   2
+                     101     ; #include <reg51.h>
+                     102     ; #include "dht.h"
+                     103     ; #include "port.h"
+                     104     ; #include "delay.h"
+                     105     ; 
+                     106     ; 
+                     107     ; void Request()   /* Microcontroller send request */
+                     108     
+----                 109             RSEG  ?PR?Request?DHT
+0000                 110     Request:
+                     111             USING   0
+                     112                             ; SOURCE LINE # 7
+                     113     ; {
+                     114                             ; SOURCE LINE # 8
+                     115     ;  DHT11 = 0;  /* set to low pin */
+                     116                             ; SOURCE LINE # 9
+0000 C2B4            117             CLR     DHT11
+                     118     ;  timer_delay20ms(); /* wait for 20ms */
+                     119                             ; SOURCE LINE # 10
+0002 120000   F      120             LCALL   timer_delay20ms
+                     121     ;  DHT11 = 1;  /* set to high pin */
+                     122                             ; SOURCE LINE # 11
+0005 D2B4            123             SETB    DHT11
+A51 MACRO ASSEMBLER  DHT                                                                  03/18/2022 16:37:06 PAGE     3
+
+                     124     ; }
+                     125                             ; SOURCE LINE # 12
+0007 22              126             RET     
+                     127     ; END OF Request
+                     128     
+                     129     ; 
+                     130     ; void Response()   /* Receive response from DHT11 */
+                     131     
+----                 132             RSEG  ?PR?Response?DHT
+0000                 133     Response:
+                     134                             ; SOURCE LINE # 14
+                     135     ; {
+                     136                             ; SOURCE LINE # 15
+0000                 137     ?C0002:
+                     138     ;  while(DHT11==1);
+                     139                             ; SOURCE LINE # 16
+0000 20B4FD          140             JB      DHT11,?C0002
+0003                 141     ?C0004:
+                     142     ;  while(DHT11==0);
+                     143                             ; SOURCE LINE # 17
+0003 30B4FD          144             JNB     DHT11,?C0004
+0006                 145     ?C0006:
+                     146     ;  while(DHT11==1);
+                     147                             ; SOURCE LINE # 18
+0006 20B4FD          148             JB      DHT11,?C0006
+                     149     ; }
+                     150                             ; SOURCE LINE # 19
+0009 22              151             RET     
+                     152     ; END OF Response
+                     153     
+                     154     ; 
+                     155     ; int Receive_data()  /* Receive data */
+                     156     
+----                 157             RSEG  ?PR?Receive_data?DHT
+0000                 158     Receive_data:
+                     159             USING   0
+                     160                             ; SOURCE LINE # 21
+                     161     ; {
+                     162                             ; SOURCE LINE # 22
+                     163     ;  int q,c=0; 
+                     164                             ; SOURCE LINE # 23
+0000 E4              165             CLR     A
+0001 F500     F      166             MOV     c?241,A
+0003 F500     F      167             MOV     c?241+01H,A
+                     168     ;  for (q=0; q<8; q++)
+                     169                             ; SOURCE LINE # 24
+0005 F500     F      170             MOV     q?240,A
+0007 F500     F      171             MOV     q?240+01H,A
+0009                 172     ?C0009:
+                     173     ;  {
+                     174                             ; SOURCE LINE # 25
+0009                 175     ?C0012:
+                     176     ;   while(DHT11==0);/* check received bit 0 or 1 */
+                     177                             ; SOURCE LINE # 26
+0009 30B4FD          178             JNB     DHT11,?C0012
+                     179     ;   timer_delay30us();
+                     180                             ; SOURCE LINE # 27
+000C 120000   F      181             LCALL   timer_delay30us
+                     182     ;   if(DHT11 == 1) /* If high pulse is greater than 30ms */
+                     183                             ; SOURCE LINE # 28
+000F E500     F      184             MOV     A,c?241+01H
+0011 25E0            185             ADD     A,ACC
+0013 30B40D          186             JNB     DHT11,?C0014
+                     187     ;   c = (c<<1)|(0x01);/* Then its logic HIGH */
+                     188                             ; SOURCE LINE # 29
+0016 FF              189             MOV     R7,A
+A51 MACRO ASSEMBLER  DHT                                                                  03/18/2022 16:37:06 PAGE     4
+
+0017 E500     F      190             MOV     A,c?241
+0019 33              191             RLC     A
+001A F500     F      192             MOV     c?241,A
+001C EF              193             MOV     A,R7
+001D 4401            194             ORL     A,#01H
+001F F500     F      195             MOV     c?241+01H,A
+0021 8007            196             SJMP    ?C0016
+0023                 197     ?C0014:
+                     198     ;   else  /* otherwise its logic LOW */
+                     199     ;   c = (c<<1);
+                     200                             ; SOURCE LINE # 31
+0023 F500     F      201             MOV     c?241+01H,A
+0025 E500     F      202             MOV     A,c?241
+0027 33              203             RLC     A
+0028 F500     F      204             MOV     c?241,A
+002A                 205     ?C0016:
+                     206     ;   while(DHT11==1);
+                     207                             ; SOURCE LINE # 32
+002A 20B4FD          208             JB      DHT11,?C0016
+                     209     ;  }
+                     210                             ; SOURCE LINE # 33
+002D 0500     F      211             INC     q?240+01H
+002F E500     F      212             MOV     A,q?240+01H
+0031 7002            213             JNZ     ?C0019
+0033 0500     F      214             INC     q?240
+0035                 215     ?C0019:
+0035 C3              216             CLR     C
+0036 9408            217             SUBB    A,#08H
+0038 E500     F      218             MOV     A,q?240
+003A 6480            219             XRL     A,#080H
+003C 9480            220             SUBB    A,#080H
+003E 40C9            221             JC      ?C0009
+0040                 222     ?C0010:
+                     223     ; 
+                     224     ;  return c;
+                     225                             ; SOURCE LINE # 35
+0040 AE00     F      226             MOV     R6,c?241
+0042 AF00     F      227             MOV     R7,c?241+01H
+                     228     ; }                     ; SOURCE LINE # 36
+0044 22              229             RET     
+                     230     ; END OF Receive_data
+                     231     
+                     232             END
+A51 MACRO ASSEMBLER  DHT                                                                  03/18/2022 16:37:06 PAGE     5
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E               T Y P E  V A L U E   ATTRIBUTES
+
+?C0002 . . . . . . .  C ADDR   0000H   R   SEG=?PR?RESPONSE?DHT
+?C0004 . . . . . . .  C ADDR   0003H   R   SEG=?PR?RESPONSE?DHT
+?C0006 . . . . . . .  C ADDR   0006H   R   SEG=?PR?RESPONSE?DHT
+?C0009 . . . . . . .  C ADDR   0009H   R   SEG=?PR?RECEIVE_DATA?DHT
+?C0010 . . . . . . .  C ADDR   0040H   R   SEG=?PR?RECEIVE_DATA?DHT
+?C0012 . . . . . . .  C ADDR   0009H   R   SEG=?PR?RECEIVE_DATA?DHT
+?C0014 . . . . . . .  C ADDR   0023H   R   SEG=?PR?RECEIVE_DATA?DHT
+?C0016 . . . . . . .  C ADDR   002AH   R   SEG=?PR?RECEIVE_DATA?DHT
+?C0019 . . . . . . .  C ADDR   0035H   R   SEG=?PR?RECEIVE_DATA?DHT
+?DT?RECEIVE_DATA?DHT  D SEG    0004H       REL=UNIT
+?PR?RECEIVE_DATA?DHT  C SEG    0045H       REL=UNIT
+?PR?REQUEST?DHT. . .  C SEG    0008H       REL=UNIT
+?PR?RESPONSE?DHT . .  C SEG    000AH       REL=UNIT
+?RECEIVE_DATA?BYTE .  D ADDR   0000H   R   SEG=?DT?RECEIVE_DATA?DHT
+AC . . . . . . . . .  B ADDR   00D0H.6 A   
+ACC. . . . . . . . .  D ADDR   00E0H   A   
+ADC0804_CS . . . . .  B ADDR   0090H.3 A   
+ADC0804_INTR . . . .  B ADDR   00B0H.3 A   
+ADC0804_RD . . . . .  B ADDR   0090H.4 A   
+ADC0804_WR . . . . .  B ADDR   0090H.5 A   
+B. . . . . . . . . .  D ADDR   00F0H   A   
+C?241. . . . . . . .  D ADDR   0002H   R   SEG=?DT?RECEIVE_DATA?DHT
+CY . . . . . . . . .  B ADDR   00D0H.7 A   
+DHT. . . . . . . . .  N NUMB   -----       
+DHT11. . . . . . . .  B ADDR   00B0H.4 A   
+DPH. . . . . . . . .  D ADDR   0083H   A   
+DPL. . . . . . . . .  D ADDR   0082H   A   
+EA . . . . . . . . .  B ADDR   00A8H.7 A   
+EN . . . . . . . . .  B ADDR   0090H.0 A   
+ES . . . . . . . . .  B ADDR   00A8H.4 A   
+ET0. . . . . . . . .  B ADDR   00A8H.1 A   
+ET1. . . . . . . . .  B ADDR   00A8H.3 A   
+EX0. . . . . . . . .  B ADDR   00A8H.0 A   
+EX1. . . . . . . . .  B ADDR   00A8H.2 A   
+F0 . . . . . . . . .  B ADDR   00D0H.5 A   
+IE . . . . . . . . .  D ADDR   00A8H   A   
+IE0. . . . . . . . .  B ADDR   0088H.1 A   
+IE1. . . . . . . . .  B ADDR   0088H.3 A   
+INT0 . . . . . . . .  B ADDR   00B0H.2 A   
+INT1 . . . . . . . .  B ADDR   00B0H.3 A   
+INT_LCD. . . . . . .  B ADDR   00B0H.3 A   
+IP . . . . . . . . .  D ADDR   00B8H   A   
+IT0. . . . . . . . .  B ADDR   0088H.0 A   
+IT1. . . . . . . . .  B ADDR   0088H.2 A   
+LED_GPMY . . . . . .  B ADDR   00B0H.6 A   
+LED_LCD. . . . . . .  B ADDR   00B0H.7 A   
+MQ05 . . . . . . . .  B ADDR   00B0H.5 A   
+OV . . . . . . . . .  B ADDR   00D0H.2 A   
+P. . . . . . . . . .  B ADDR   00D0H.0 A   
+P0 . . . . . . . . .  D ADDR   0080H   A   
+P1 . . . . . . . . .  D ADDR   0090H   A   
+P2 . . . . . . . . .  D ADDR   00A0H   A   
+P3 . . . . . . . . .  D ADDR   00B0H   A   
+PCON . . . . . . . .  D ADDR   0087H   A   
+PS . . . . . . . . .  B ADDR   00B8H.4 A   
+PSW. . . . . . . . .  D ADDR   00D0H   A   
+PT0. . . . . . . . .  B ADDR   00B8H.1 A   
+PT1. . . . . . . . .  B ADDR   00B8H.3 A   
+PX0. . . . . . . . .  B ADDR   00B8H.0 A   
+PX1. . . . . . . . .  B ADDR   00B8H.2 A   
+A51 MACRO ASSEMBLER  DHT                                                                  03/18/2022 16:37:06 PAGE     6
+
+Q?240. . . . . . . .  D ADDR   0000H   R   SEG=?DT?RECEIVE_DATA?DHT
+RB8. . . . . . . . .  B ADDR   0098H.2 A   
+RD . . . . . . . . .  B ADDR   00B0H.7 A   
+RECEIVE_DATA . . . .  C ADDR   0000H   R   SEG=?PR?RECEIVE_DATA?DHT
+REN. . . . . . . . .  B ADDR   0098H.4 A   
+REQUEST. . . . . . .  C ADDR   0000H   R   SEG=?PR?REQUEST?DHT
+RESPONSE . . . . . .  C ADDR   0000H   R   SEG=?PR?RESPONSE?DHT
+RI . . . . . . . . .  B ADDR   0098H.0 A   
+RS . . . . . . . . .  B ADDR   0090H.2 A   
+RS0. . . . . . . . .  B ADDR   00D0H.3 A   
+RS1. . . . . . . . .  B ADDR   00D0H.4 A   
+RW . . . . . . . . .  B ADDR   0090H.1 A   
+RXD. . . . . . . . .  B ADDR   00B0H.0 A   
+SBUF . . . . . . . .  D ADDR   0099H   A   
+SCON . . . . . . . .  D ADDR   0098H   A   
+SM0. . . . . . . . .  B ADDR   0098H.7 A   
+SM1. . . . . . . . .  B ADDR   0098H.6 A   
+SM2. . . . . . . . .  B ADDR   0098H.5 A   
+SP . . . . . . . . .  D ADDR   0081H   A   
+T0 . . . . . . . . .  B ADDR   00B0H.4 A   
+T1 . . . . . . . . .  B ADDR   00B0H.5 A   
+TB8. . . . . . . . .  B ADDR   0098H.3 A   
+TCON . . . . . . . .  D ADDR   0088H   A   
+TF0. . . . . . . . .  B ADDR   0088H.5 A   
+TF1. . . . . . . . .  B ADDR   0088H.7 A   
+TH0. . . . . . . . .  D ADDR   008CH   A   
+TH1. . . . . . . . .  D ADDR   008DH   A   
+TI . . . . . . . . .  B ADDR   0098H.1 A   
+TIMER_DELAY20MS. . .  C ADDR   -----       EXT
+TIMER_DELAY30US. . .  C ADDR   -----       EXT
+TL0. . . . . . . . .  D ADDR   008AH   A   
+TL1. . . . . . . . .  D ADDR   008BH   A   
+TMOD . . . . . . . .  D ADDR   0089H   A   
+TR0. . . . . . . . .  B ADDR   0088H.4 A   
+TR1. . . . . . . . .  B ADDR   0088H.6 A   
+TXD. . . . . . . . .  B ADDR   00B0H.1 A   
+UART_RX. . . . . . .  B ADDR   00B0H.0 A   
+UART_TX. . . . . . .  B ADDR   00B0H.1 A   
+WR . . . . . . . . .  B ADDR   00B0H.6 A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)
